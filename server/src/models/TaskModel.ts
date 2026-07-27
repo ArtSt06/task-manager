@@ -22,7 +22,7 @@ const TaskSchema = new Schema<TaskEntity>(
     },
     status: {
       type: String,
-      enum: ["todo", "in-progress", "done"],
+      enum: ["todo", "inProgress", "done"],
       default: "todo",
     },
     deadline: { type: Date },
