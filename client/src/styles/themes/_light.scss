@@ -1,1 +1,39 @@
-/* Светлая тема */
+:root {
+  --primary-color: rgba(99, 102, 241, 1);
+  --primary-hover: rgba(79, 70, 229, 1);
+  --primary-light: rgba(224, 231, 255, 1);
+
+  --bg-primary: rgba(248, 250, 252, 1);
+  --bg-secondary: rgba(255, 255, 255, 1);
+  --bg-hover: rgba(241, 245, 249, 1);
+  --bg-active: rgba(224, 231, 255, 1);
+  --bg-input: rgba(241, 245, 249, 1);
+  --bg-card: rgba(255, 255, 255, 1);
+
+  --text-primary: rgba(15, 23, 42, 1);
+  --text-secondary: rgba(100, 116, 139, 1);
+  --text-muted: rgba(148, 163, 184, 1);
+  --text-inverse: rgba(255, 255, 255, 1);
+
+  --border-color: rgba(226, 232, 240, 1);
+  --border-hover: rgba(203, 213, 225, 1);
+
+  --shadow-color: rgba(0, 0, 0, 0.05);
+
+  --priority-low: rgba(34, 197, 94, 1);
+  --priority-low-bg: rgba(220, 252, 231, 1);
+  --priority-medium: rgba(245, 158, 11, 1);
+  --priority-medium-bg: rgba(254, 243, 199, 1);
+  --priority-high: rgba(239, 68, 68, 1);
+  --priority-high-bg: rgba(254, 226, 226, 1);
+
+  --status-todo: rgba(148, 163, 184, 1);
+  --status-todo-bg: rgba(241, 245, 249, 1);
+  --status-inProgress: rgba(59, 130, 246, 1);
+  --status-inProgress-bg: rgba(219, 234, 254, 1);
+  --status-done: rgba(34, 197, 94, 1);
+  --status-done-bg: rgba(220, 252, 231, 1);
+
+  --scrollbar-track: rgba(241, 245, 249, 1);
+  --scrollbar-thumb: rgba(203, 213, 225, 1);
+}

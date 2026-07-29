@@ -1,0 +1,92 @@
+@use "@styles/abstracts/variables" as *;
+@use "@styles/abstracts/mixins" as *;
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: $sidebar-width;
+  height: 100vh;
+  padding: $spacing-lg $spacing-md;
+
+  @include flex-column;
+
+  border-right: 1px solid var(--border-color);
+
+  background: var(--bg-secondary);
+
+  &-logo {
+    h1 {
+      margin-bottom: $spacing-xl;
+
+      font-size: $font-size-lg;
+      color: var(--text-primary);
+    }
+  }
+
+  &-nav {
+    @include flex-column;
+    gap: $spacing-sm;
+    flex: 1;
+
+    .nav-link {
+      padding: $spacing-md $spacing-lg;
+
+      @include flex-center;
+      justify-content: flex-start;
+      gap: $spacing-md;
+
+      border-radius: $border-radius;
+
+      color: var(--text-secondary);
+      text-decoration: none;
+
+      transition: all $transition-duration;
+
+      &:hover {
+        background: var(--bg-hover);
+
+        color: var(--text-primary);
+      }
+
+      &.active {
+        background: var(--bg-active);
+
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      svg {
+        font-size: $font-size-md;
+      }
+    }
+  }
+
+  &-create-btn {
+    width: 100%;
+    padding: $spacing-md;
+
+    @include flex-center;
+    gap: $spacing-sm;
+
+    border: none;
+    border-radius: $border-radius;
+
+    background: var(--primary-color);
+
+    font-weight: 600;
+    color: rgba(255, 255, 255, 1);
+
+    cursor: pointer;
+    transition: opacity $transition-duration;
+
+    &:hover {
+      opacity: 0.9;
+    }
+
+    svg {
+      font-size: $font-size-base;
+    }
+  }
+}

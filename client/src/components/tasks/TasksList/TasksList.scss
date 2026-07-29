@@ -1,0 +1,28 @@
+@use "@styles/abstracts/variables" as *;
+@use "@styles/abstracts/mixins" as *;
+
+.task-list {
+  @include flex-column;
+  gap: $spacing-md;
+}
+
+.task-list-empty {
+  padding: $spacing-xxl;
+
+  @include flex-column-center;
+
+  text-align: center;
+  color: var(--text-secondary);
+
+  p {
+    margin-bottom: $spacing-sm;
+
+    font-size: $font-size-lg;
+    font-weight: 500;
+  }
+
+  span {
+    font-size: $font-size-sm;
+    color: var(--text-muted);
+  }
+}

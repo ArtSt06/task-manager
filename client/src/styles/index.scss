@@ -1,2 +1,5 @@
-@use "@styles/base/reset";
-@use "@styles/base/global";
+@use "base/reset";
+@use "base/global";
+
+@use "themes/light";
+@use "themes/dark";

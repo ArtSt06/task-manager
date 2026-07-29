@@ -1,0 +1,82 @@
+@use "@styles/abstracts/variables" as *;
+@use "@styles/abstracts/mixins" as *;
+
+.header {
+  min-height: $header-height;
+  padding: $spacing-md $spacing-lg;
+
+  @include flex-space-between;
+  gap: $spacing-md;
+
+  border-bottom: 1px solid var(--border-color);
+
+  background: var(--bg-secondary);
+
+  &-search {
+    position: relative;
+
+    max-width: 400px;
+
+    flex: 1;
+
+    .search-icon {
+      position: absolute;
+      left: $spacing-md;
+      top: 50%;
+
+      transform: translateY(-50%);
+
+      font-size: $font-size-base;
+      color: var(--text-secondary);
+    }
+
+    input {
+      width: 100%;
+      padding: $spacing-sm $spacing-md $spacing-sm $spacing-xl;
+
+      border: 1px solid var(--border-color);
+      border-radius: $border-radius;
+      outline: none;
+
+      background: var(--bg-input);
+
+      font-size: $font-size-sm;
+      color: var(--text-primary);
+
+      transition: border-color $transition-duration;
+
+      &::placeholder {
+        color: var(--text-muted);
+      }
+
+      &:focus {
+        border-color: var(--primary-color);
+      }
+    }
+  }
+
+  &-filters {
+    display: flex;
+    gap: $spacing-md;
+
+    select {
+      min-width: 140px;
+      padding: $spacing-sm $spacing-md;
+
+      border: 1px solid var(--border-color);
+      border-radius: $border-radius;
+      outline: none;
+
+      background: var(--bg-input);
+
+      font-size: $font-size-sm;
+      color: var(--text-primary);
+
+      cursor: pointer;
+
+      &:focus {
+        border-color: var(--primary-color);
+      }
+    }
+  }
+}

@@ -1,21 +1,26 @@
-/* $primary-color: ; */
-/* $secondary-color: ; */
-/* $tertiary-color: ; */
-/* $accent-color: ; */
-/* $light-background-color: ; */
-/* $dark-background-color: ; */
-/* $light-font-color: ; */
-/* $dark-font-color: ; */
-/* $border-color: ; */
-
-/* $font-primary: ; */
-/* $font-secondary: ; */
+$font-family: "Inter", "Segoe UI", Roboto, sans-serif;
 
 $font-size-xs: 12px;
-$font-size-s: 14px;
+$font-size-sm: 14px;
 $font-size-base: 16px;
-$font-size-m: 18px;
-$font-size-l: 24px;
+$font-size-md: 18px;
+$font-size-lg: 24px;
 $font-size-xl: 32px;
 $font-size-xxl: 36px;
 $font-size-hero: 40px;
+
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-xxl: 48px;
+
+$sidebar-width: 260px;
+$header-height: 72px;
+$border-radius: 8px;
+$transition-duration: 0.2s;
+
+$shadow-sm: 0 1px 2px var(--shadow-color);
+$shadow-md: 0 4px 6px var(--shadow-color);
+$shadow-lg: 0 10px 15px var(--shadow-color);

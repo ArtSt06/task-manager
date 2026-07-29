@@ -1,0 +1,35 @@
+@use "@styles/abstracts/variables" as *;
+@use "@styles/abstracts/mixins" as *;
+
+.app-layout {
+  min-height: 100vh;
+
+  display: flex;
+
+  background: var(--bg-primary);
+}
+
+.app-main {
+  margin-left: $sidebar-width;
+
+  @include flex-column;
+
+  flex: 1;
+}
+
+.app-content {
+  padding: $spacing-lg;
+
+  flex: 1;
+
+  overflow-y: auto;
+
+  .loading {
+    height: 200px;
+
+    @include flex-center;
+
+    font-size: $font-size-md;
+    color: var(--text-secondary);
+  }
+}

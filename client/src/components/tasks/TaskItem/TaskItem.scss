@@ -1,0 +1,137 @@
+@use "@styles/abstracts/variables" as *;
+@use "@styles/abstracts/mixins" as *;
+
+.task-item {
+  padding: $spacing-md $spacing-lg;
+
+  border: 1px solid var(--border-color);
+  border-left-width: 4px;
+  border-radius: $border-radius;
+
+  background: var(--bg-card);
+
+  transition: all $transition-duration;
+
+  &.priority-low {
+    border-left-color: var(--priority-low);
+  }
+  &.priority-medium {
+    border-left-color: var(--priority-medium);
+  }
+  &.priority-high {
+    border-left-color: var(--priority-high);
+  }
+
+  &:hover {
+    border-color: var(--border-hover);
+    box-shadow: $shadow-md;
+  }
+
+  .task-header {
+    margin-bottom: $spacing-sm;
+
+    @include flex-space-between;
+    gap: $spacing-md;
+
+    h3 {
+      font-size: $font-size-base;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .task-badges {
+      display: flex;
+      gap: $spacing-sm;
+      flex-shrink: 0;
+
+      .priority,
+      .status {
+        padding: 2px $spacing-sm;
+
+        border-radius: 12px;
+
+        font-size: $font-size-xs;
+        font-weight: 500;
+        text-transform: capitalize;
+      }
+
+      .priority-low {
+        background: var(--priority-low-bg);
+
+        color: var(--priority-low);
+      }
+      .priority-medium {
+        background: var(--priority-medium-bg);
+
+        color: var(--priority-medium);
+      }
+      .priority-high {
+        background: var(--priority-high-bg);
+
+        color: var(--priority-high);
+      }
+
+      .status-todo {
+        background: var(--status-todo-bg);
+
+        color: var(--status-todo);
+      }
+      .status-inProgress {
+        background: var(--status-inProgress-bg);
+
+        color: var(--status-inProgress);
+      }
+      .status-done {
+        background: var(--status-done-bg);
+
+        color: var(--status-done);
+      }
+    }
+  }
+
+  .task-description {
+    margin-bottom: $spacing-sm;
+
+    color: var(--text-secondary);
+    font-size: $font-size-sm;
+  }
+
+  .task-meta {
+    margin-bottom: $spacing-md;
+
+    display: flex;
+    gap: $spacing-md;
+
+    font-size: $font-size-xs;
+    color: var(--text-muted);
+  }
+
+  .task-actions {
+    display: flex;
+    gap: $spacing-sm;
+
+    button {
+      padding: 4px $spacing-md;
+
+      border-radius: $border-radius;
+
+      background: var(--bg-hover);
+
+      font-size: $font-size-sm;
+      color: var(--text-secondary);
+
+      transition: all $transition-duration;
+
+      &:hover:not(:disabled) {
+        background: var(--bg-active);
+
+        color: var(--text-primary);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+}

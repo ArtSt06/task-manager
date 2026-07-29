@@ -1,0 +1,121 @@
+@use "@styles/abstracts/variables" as *;
+@use "@styles/abstracts/mixins" as *;
+
+.custom-select {
+  position: relative;
+  width: 100%;
+
+  .custom-select-trigger {
+    position: relative;
+
+    min-height: 40px;
+    padding: 8px 14px;
+
+    @include flex-space-between;
+
+    border: 1px solid var(--border-color);
+    border-radius: $border-radius;
+
+    background: var(--bg-input);
+
+    font-size: $font-size-sm;
+    color: var(--text-primary);
+
+    user-select: none;
+    cursor: pointer;
+    transition:
+      border-color $transition-duration,
+      box-shadow $transition-duration;
+
+    &:focus-within {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    &::after {
+      content: "▾";
+
+      margin-left: 8px;
+
+      font-size: 18px;
+      color: var(--text-secondary);
+
+      transition: transform $transition-duration;
+    }
+
+    &.open::after {
+      transform: rotate(180deg);
+    }
+
+    .custom-select-value {
+      flex: 1;
+
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .custom-select-options {
+    position: absolute;
+    z-index: 100;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+
+    max-height: 200px;
+    padding: 4px 0;
+
+    border: 1px solid var(--border-color);
+    border-radius: $border-radius;
+
+    background: var(--bg-secondary);
+    box-shadow: $shadow-md;
+
+    overflow-y: auto;
+    list-style: none;
+    animation: dropdown-fade 0.15s ease;
+
+    li {
+      padding: 8px 14px;
+
+      font-size: $font-size-sm;
+      color: var(--text-primary);
+
+      cursor: pointer;
+
+      &:hover {
+        background: var(--bg-hover);
+      }
+
+      &.active {
+        background: var(--bg-active);
+
+        font-weight: 500;
+        color: var(--primary-color);
+      }
+    }
+  }
+
+  &.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+    cursor: not-allowed;
+
+    .custom-select-trigger {
+      cursor: not-allowed;
+    }
+  }
+}
+
+@keyframes dropdown-fade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

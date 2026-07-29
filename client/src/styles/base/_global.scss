@@ -1,5 +1,23 @@
-/* Здесь будут глобальные стили */
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
 #root {
   min-height: 100vh;
-  background: rgb(37, 37, 37);
+
+  background: var(--bg-primary);
+
+  font-family: $font-family;
+  color: var(--text-primary);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+* {
+  transition:
+    border-color $transition-duration ease,
+    background-color $transition-duration ease,
+    color $transition-duration ease;
 }

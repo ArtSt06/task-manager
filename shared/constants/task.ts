@@ -1,4 +1,4 @@
-import { Priority, Status } from "../types/task.types";
+import type { Priority, Status } from "../types/task.types";
 
 export const PRIORITIES: Priority[] = ["low", "medium", "high"];
 export const STATUSES: Status[] = ["todo", "inProgress", "done"];
