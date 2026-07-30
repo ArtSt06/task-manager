@@ -1,13 +1,18 @@
 import { NavLink } from "react-router-dom";
 import { FaTasks, FaChartBar, FaCog, FaPlus } from "react-icons/fa";
 
+import { useAppDispatch } from "@store/reduxHooks";
+import { openForm } from "@store/features/ui/uiSlice";
+
 import "./Sidebar.scss";
 
-interface SidebarProps {
-  onCreateTask: () => void;
-}
+const Sidebar = () => {
+  const dispatch = useAppDispatch();
 
-const Sidebar = ({ onCreateTask }: SidebarProps) => {
+  const handleCreateTask = () => {
+    dispatch(openForm());
+  };
+
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
@@ -38,7 +43,7 @@ const Sidebar = ({ onCreateTask }: SidebarProps) => {
         </NavLink>
       </nav>
 
-      <button className="sidebar-create-btn" onClick={onCreateTask}>
+      <button className="sidebar-create-btn" onClick={handleCreateTask}>
         <FaPlus /> Создать задачу
       </button>
     </aside>

@@ -7,14 +7,10 @@ import Loader from "@components/common/Loader";
 
 import "./AppLayout.scss";
 
-interface AppLayoutProps {
-  onCreateTask: () => void;
-}
-
-const AppLayout = ({ onCreateTask }: AppLayoutProps) => {
+const AppLayout = () => {
   return (
     <div className="app-layout">
-      <Sidebar onCreateTask={onCreateTask} />
+      <Sidebar />
 
       <div className="app-main">
         <Header />

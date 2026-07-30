@@ -24,10 +24,10 @@
     "paths": {
       "@api/*": ["src/api/*"],
       "@components/*": ["src/components/*"],
-      "@contexts/*": ["src/contexts/*"],
       "@hooks/*": ["src/hooks/*"],
       "@pages/*": ["src/pages/*"],
       "@shared/*": ["../shared/*"] ,
+      "@store/*": ["src/store/*"],
       "@styles/*": ["src/styles/*"],
       "@utils/*": ["src/utils/*"]
     }

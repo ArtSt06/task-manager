@@ -1,7 +1,8 @@
-import { lazy, useState } from "react";
+import { lazy, useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { TasksProvider, useTasksContext } from "@contexts/TasksContext";
+import { useAppSelector } from "@store/reduxHooks";
+import { selectTheme } from "@store/features/ui/uiSelectors";
 
 import AppLayout from "@components/layout/AppLayout";
 import TaskFormModal from "@components/tasks/TaskFormModal";
@@ -10,27 +11,17 @@ const TasksPage = lazy(() => import("@pages/TasksPage"));
 const StatisticsPage = lazy(() => import("@pages/StatisticsPage"));
 const SettingsPage = lazy(() => import("@pages/SettingsPage"));
 
-const AppContent = () => {
-  const { refreshTasks } = useTasksContext();
-  const [isFormOpen, setIsFormOpen] = useState(false);
+const App = () => {
+  const theme = useAppSelector(selectTheme);
 
-  const handleOpenForm = () => {
-    setIsFormOpen(true);
-  };
-
-  const handleCloseForm = () => {
-    setIsFormOpen(false);
-  };
-
-  const handleSuccess = () => {
-    refreshTasks();
-    setIsFormOpen(false);
-  };
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
 
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <AppLayout onCreateTask={handleOpenForm} />,
+      element: <AppLayout />,
       children: [
         { index: true, element: <TasksPage /> },
         { path: "statistics", element: <StatisticsPage /> },
@@ -42,21 +33,8 @@ const AppContent = () => {
   return (
     <>
       <RouterProvider router={router} />
-      <TaskFormModal
-        isOpen={isFormOpen}
-        onClose={handleCloseForm}
-        onSuccess={handleSuccess}
-        initialData={null}
-      />
+      <TaskFormModal />
     </>
-  );
-};
-
-const App = () => {
-  return (
-    <TasksProvider>
-      <AppContent />
-    </TasksProvider>
   );
 };
 

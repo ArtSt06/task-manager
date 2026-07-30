@@ -1,33 +1,28 @@
 import type { Task } from "@shared/types";
 
-import { useAction } from "@hooks/useAction";
-import { deleteTask } from "@api/tasks";
 import { formatDate } from "@utils/date";
-
 import { PRIORITY_LABELS, STATUS_LABELS } from "@shared/constants";
+
+import { useAppDispatch } from "@store/reduxHooks";
+import { openForm } from "@store/features/ui/uiSlice";
+import { removeTask } from "@store/features/tasks/tasksSlice";
 
 import "./TaskItem.scss";
 
 interface TaskItemProps {
   task: Task;
-  onEdit: (task: Task) => void;
-  onUpdate: () => void;
 }
 
-const TaskItem = ({ task, onEdit, onUpdate }: TaskItemProps) => {
-  const { execute: deleteAction, loading: deleteLoading } =
-    useAction(deleteTask);
+const TaskItem = ({ task }: TaskItemProps) => {
+  const dispatch = useAppDispatch();
 
-  const handleDelete = async () => {
+  const handleEdit = () => {
+    dispatch(openForm(task._id));
+  };
+
+  const handleDelete = () => {
     if (!window.confirm(`Удалить задачу "${task.title}"?`)) return;
-
-    const result = await deleteAction(task._id);
-
-    if (result.success) {
-      onUpdate();
-    } else {
-      alert(result.error);
-    }
+    dispatch(removeTask(task._id));
   };
 
   return (
@@ -52,17 +47,14 @@ const TaskItem = ({ task, onEdit, onUpdate }: TaskItemProps) => {
 
       <div className="task-meta">
         {task.deadline && <span>{formatDate(task.deadline)}</span>}
+
         <span>{formatDate(task.createdAt)}</span>
       </div>
 
       <div className="task-actions">
-        <button onClick={() => onEdit(task)} disabled={deleteLoading}>
-          Редактировать
-        </button>
+        <button onClick={handleEdit}>Редактировать</button>
 
-        <button onClick={handleDelete} disabled={deleteLoading}>
-          {deleteLoading ? "Удаление..." : "Удалить"}
-        </button>
+        <button onClick={handleDelete}>Удалить</button>
       </div>
     </div>
   );
