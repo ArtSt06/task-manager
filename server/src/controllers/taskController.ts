@@ -1,4 +1,7 @@
 import { Request, Response } from "express";
+
+import { cache } from "@utils/cache";
+
 import Task from "@models/TaskModel";
 
 const handleError = (res: Response, error: unknown) => {
@@ -6,6 +9,10 @@ const handleError = (res: Response, error: unknown) => {
   const message =
     error instanceof Error ? error.message : "Внутренняя ошибка сервера";
   res.status(500).json({ message });
+};
+
+const invalidateStatisticsCache = () => {
+  cache.clear("statistics-");
 };
 
 export const getAllTasks = async (req: Request, res: Response) => {
@@ -49,6 +56,7 @@ export const createTask = async (req: Request, res: Response) => {
     });
 
     const savedTask = await task.save();
+    invalidateStatisticsCache();
     res
       .status(201)
       .json({ message: "Задача успешно создана", task: savedTask });
@@ -90,6 +98,7 @@ export const updateTask = async (req: Request, res: Response) => {
       return;
     }
 
+    invalidateStatisticsCache();
     res.json({ message: "Задача успешно обновлена", task: updatedTask });
   } catch (error) {
     handleError(res, error);
@@ -107,6 +116,7 @@ export const deleteTask = async (req: Request, res: Response) => {
       return;
     }
 
+    invalidateStatisticsCache();
     res.json({ message: "Задача успешно удалена" });
   } catch (error) {
     handleError(res, error);
