@@ -54,45 +54,54 @@ const getPriorityDistribution = async (): Promise<PriorityDistribution> => {
   return distribution;
 };
 
-const getTimeline = async (period: StatisticsPeriod) => {
-  const now = new Date();
-  let startDate: Date;
-
-  if (period === "week") {
-    startDate = new Date(now);
-    startDate.setDate(now.getDate() - 6);
-  } else {
-    startDate = new Date(now);
-    startDate.setDate(now.getDate() - 29);
-  }
-
+const getCreatedTimeline = async (startDate: Date) => {
   const result = await Task.aggregate([
-    {
-      $match: {
-        $or: [
-          { createdAt: { $gte: startDate } },
-          { updatedAt: { $gte: startDate } },
-        ],
-      },
-    },
+    { $match: { createdAt: { $gte: startDate } } },
     {
       $project: {
         date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-        status: 1,
       },
     },
-    {
-      $group: {
-        _id: "$date",
-        created: { $sum: 1 },
-        completed: {
-          $sum: {
-            $cond: [{ $eq: ["$status", "done"] }, 1, 0],
-          },
-        },
-      },
-    },
+    { $group: { _id: "$date", created: { $sum: 1 } } },
     { $sort: { _id: 1 } },
+  ]);
+
+  const map: Record<string, number> = {};
+  result.forEach((item) => {
+    map[item._id] = item.created;
+  });
+  return map;
+};
+
+const getCompletedTimeline = async (startDate: Date) => {
+  const result = await Task.aggregate([
+    { $match: { status: "done", updatedAt: { $gte: startDate } } },
+    {
+      $project: {
+        date: { $dateToString: { format: "%Y-%m-%d", date: "$updatedAt" } },
+      },
+    },
+    { $group: { _id: "$date", completed: { $sum: 1 } } },
+    { $sort: { _id: 1 } },
+  ]);
+
+  const map: Record<string, number> = {};
+  result.forEach((item) => {
+    map[item._id] = item.completed;
+  });
+  return map;
+};
+
+const getTimeline = async (period: StatisticsPeriod) => {
+  const now = new Date();
+  let startDate: Date;
+  const days = period === "week" ? 6 : 29;
+  startDate = new Date(now);
+  startDate.setDate(now.getDate() - days);
+
+  const [createdMap, completedMap] = await Promise.all([
+    getCreatedTimeline(startDate),
+    getCompletedTimeline(startDate),
   ]);
 
   const timeline = [];
@@ -101,11 +110,10 @@ const getTimeline = async (period: StatisticsPeriod) => {
 
   while (currentDate <= endDate) {
     const dateStr = currentDate.toISOString().slice(0, 10);
-    const found = result.find((item) => item._id === dateStr);
     timeline.push({
       date: dateStr,
-      created: found ? found.created : 0,
-      completed: found ? found.completed : 0,
+      created: createdMap[dateStr] || 0,
+      completed: completedMap[dateStr] || 0,
     });
     currentDate.setDate(currentDate.getDate() + 1);
   }
