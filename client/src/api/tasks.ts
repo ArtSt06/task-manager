@@ -1,9 +1,10 @@
-import { apiClient } from "./client";
 import type {
   Task,
   TaskListResponse,
   TaskMutationResponse,
 } from "@shared/types";
+
+import { apiClient } from "@api/client";
 
 const TASKS_ENDPOINT = "/tasks";
 

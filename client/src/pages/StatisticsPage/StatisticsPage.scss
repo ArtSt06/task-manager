@@ -1,1 +1,95 @@
-/* Стили для страницы со статистикой */
+@use "@styles/abstracts/variables" as *;
+@use "@styles/abstracts/mixins" as *;
+
+.statistics-page {
+  h2 {
+    margin-bottom: $spacing-lg;
+
+    font-size: $font-size-xl;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .error {
+    padding: $spacing-xxl 0;
+
+    @include flex-center;
+
+    font-size: $font-size-md;
+    color: var(--priority-high);
+  }
+
+  .charts-grid {
+    @include flex-column;
+    gap: $spacing-lg;
+
+    .top-row {
+      display: flex;
+      gap: $spacing-lg;
+      align-items: stretch;
+
+      .summary-block {
+        padding: $spacing-lg;
+
+        @include flex-column-center;
+        flex: 0 0 220px;
+
+        border: 1px solid var(--border-color);
+        border-radius: $border-radius;
+
+        background: var(--bg-card);
+      }
+
+      .time-chart-wrapper {
+        min-height: 340px;
+
+        flex: 1;
+
+        .chart-container {
+          height: 100%;
+          padding: $spacing-lg;
+
+          @include flex-column;
+
+          border: 1px solid var(--border-color);
+          border-radius: $border-radius;
+
+          background: var(--bg-card);
+        }
+      }
+    }
+
+    .charts-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: $spacing-lg;
+
+      .chart-container {
+        min-height: 340px;
+        padding: $spacing-lg;
+
+        @include flex-column;
+
+        border: 1px solid var(--border-color);
+        border-radius: $border-radius;
+
+        background: var(--bg-card);
+      }
+    }
+  }
+
+  @include tablet {
+    .top-row {
+      flex-direction: column;
+
+      .summary-block {
+        flex: unset;
+        width: 100%;
+      }
+    }
+
+    .charts-row {
+      grid-template-columns: 1fr;
+    }
+  }
+}

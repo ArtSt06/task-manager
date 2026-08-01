@@ -31,11 +31,11 @@ const TaskItem = ({ task }: TaskItemProps) => {
         <h3>{task.title}</h3>
 
         <div className="task-badges">
-          <span className={`priority priority-${task.priority}`}>
+          <span className={`task-badge priority-${task.priority}`}>
             {PRIORITY_LABELS[task.priority]}
           </span>
 
-          <span className={`status status-${task.status}`}>
+          <span className={`task-badge status-${task.status}`}>
             {STATUS_LABELS[task.status]}
           </span>
         </div>

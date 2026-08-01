@@ -1,5 +1,5 @@
-@use "../abstracts/variables" as *;
-@use "../abstracts/mixins" as *;
+@use "@styles/abstracts/variables" as *;
+@use "@styles/abstracts/mixins" as *;
 
 #root {
   min-height: 100vh;
@@ -20,4 +20,50 @@ body {
     border-color $transition-duration ease,
     background-color $transition-duration ease,
     color $transition-duration ease;
+}
+
+.task-badge {
+  padding: $spacing-xs $spacing-sm;
+
+  flex-shrink: 0;
+
+  border-radius: 12px;
+
+  font-size: $font-size-xs;
+  font-weight: 500;
+  text-transform: capitalize;
+
+  &.priority-low {
+    background: var(--priority-low-bg);
+
+    color: var(--priority-low);
+  }
+  &.priority-medium {
+    background: var(--priority-medium-bg);
+
+    color: var(--priority-medium);
+  }
+  &.priority-high {
+    background: var(--priority-high-bg);
+
+    color: var(--priority-high);
+  }
+
+  &.status-todo,
+  &.created {
+    background: var(--status-todo-bg);
+
+    color: var(--status-todo);
+  }
+  &.status-inProgress {
+    background: var(--status-inProgress-bg);
+
+    color: var(--status-inProgress);
+  }
+  &.status-done,
+  &.completed {
+    background: var(--status-done-bg);
+
+    color: var(--status-done);
+  }
 }

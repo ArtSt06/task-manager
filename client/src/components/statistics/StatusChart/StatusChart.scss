@@ -1,0 +1,58 @@
+@use "@styles/abstracts/variables" as *;
+@use "@styles/abstracts/mixins" as *;
+
+.status-chart {
+  .chart-header {
+    margin-bottom: $spacing-md;
+
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+
+    h3 {
+      font-size: $font-size-md;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .chart-subtitle {
+      font-size: $font-size-sm;
+      color: var(--text-muted);
+    }
+  }
+
+  .pie-legend {
+    margin-top: $spacing-md;
+
+    @include flex-center;
+    gap: $spacing-lg;
+    flex-wrap: wrap;
+
+    .legend-item {
+      @include flex-center;
+      gap: $spacing-sm;
+
+      font-size: $font-size-sm;
+      color: var(--text-secondary);
+
+      .legend-color {
+        width: 12px;
+        height: 12px;
+
+        display: inline-block;
+        flex-shrink: 0;
+
+        border-radius: 50%;
+      }
+
+      .legend-label {
+        color: var(--text-primary);
+      }
+
+      .legend-value {
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+    }
+  }
+}

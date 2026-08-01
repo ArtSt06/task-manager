@@ -1,0 +1,73 @@
+@use "@styles/abstracts/variables" as *;
+@use "@styles/abstracts/mixins" as *;
+
+.time-chart {
+  .chart-header {
+    margin-bottom: $spacing-md;
+
+    @include flex-space-between;
+
+    h3 {
+      font-size: $font-size-md;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .period-toggle {
+      display: flex;
+      gap: $spacing-xs;
+
+      button {
+        padding: $spacing-xs $spacing-md;
+
+        border: 1px solid var(--border-color);
+        border-radius: $border-radius;
+
+        background: var(--bg-input);
+
+        font-size: $font-size-sm;
+        color: var(--text-secondary);
+
+        cursor: pointer;
+        transition: all $transition-duration;
+
+        &.active {
+          border-color: var(--primary-color);
+
+          background: var(--primary-color);
+
+          color: rgba(255, 255, 255, 1);
+        }
+
+        &:hover:not(.active) {
+          background: var(--bg-hover);
+        }
+      }
+    }
+  }
+
+  .chart-wrapper {
+    position: relative;
+
+    .chart-loading-overlay {
+      position: absolute;
+      z-index: 10;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+
+      @include flex-center;
+
+      border-radius: $border-radius;
+
+      background: rgba(0, 0, 0, 0.05);
+      backdrop-filter: blur(2px);
+
+      font-size: $font-size-sm;
+      color: var(--text-secondary);
+
+      pointer-events: none;
+    }
+  }
+}
