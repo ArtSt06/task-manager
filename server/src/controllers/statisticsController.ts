@@ -1,5 +1,6 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 
+import { AuthRequest } from "@middleware/auth";
 import { cache } from "@utils/cache";
 
 import Task from "@models/TaskModel";
@@ -11,8 +12,11 @@ import type {
   StatisticsPeriod,
 } from "@shared/types";
 
-const getStatusDistribution = async (): Promise<StatusDistribution> => {
+const getStatusDistribution = async (
+  firebaseUid: string,
+): Promise<StatusDistribution> => {
   const result = await Task.aggregate([
+    { $match: { firebaseUid } },
     { $group: { _id: "$status", count: { $sum: 1 } } },
   ]);
 
@@ -32,9 +36,11 @@ const getStatusDistribution = async (): Promise<StatusDistribution> => {
   return distribution;
 };
 
-const getPriorityDistribution = async (): Promise<PriorityDistribution> => {
+const getPriorityDistribution = async (
+  firebaseUid: string,
+): Promise<PriorityDistribution> => {
   const result = await Task.aggregate([
-    { $match: { status: "done" } },
+    { $match: { firebaseUid, status: "done" } },
     { $group: { _id: "$priority", count: { $sum: 1 } } },
   ]);
 
@@ -54,9 +60,9 @@ const getPriorityDistribution = async (): Promise<PriorityDistribution> => {
   return distribution;
 };
 
-const getCreatedTimeline = async (startDate: Date) => {
+const getCreatedTimeline = async (firebaseUid: string, startDate: Date) => {
   const result = await Task.aggregate([
-    { $match: { createdAt: { $gte: startDate } } },
+    { $match: { firebaseUid, createdAt: { $gte: startDate } } },
     {
       $project: {
         date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
@@ -73,9 +79,9 @@ const getCreatedTimeline = async (startDate: Date) => {
   return map;
 };
 
-const getCompletedTimeline = async (startDate: Date) => {
+const getCompletedTimeline = async (firebaseUid: string, startDate: Date) => {
   const result = await Task.aggregate([
-    { $match: { status: "done", updatedAt: { $gte: startDate } } },
+    { $match: { firebaseUid, status: "done", updatedAt: { $gte: startDate } } },
     {
       $project: {
         date: { $dateToString: { format: "%Y-%m-%d", date: "$updatedAt" } },
@@ -92,7 +98,7 @@ const getCompletedTimeline = async (startDate: Date) => {
   return map;
 };
 
-const getTimeline = async (period: StatisticsPeriod) => {
+const getTimeline = async (firebaseUid: string, period: StatisticsPeriod) => {
   const now = new Date();
   let startDate: Date;
   const days = period === "week" ? 6 : 29;
@@ -100,8 +106,8 @@ const getTimeline = async (period: StatisticsPeriod) => {
   startDate.setDate(now.getDate() - days);
 
   const [createdMap, completedMap] = await Promise.all([
-    getCreatedTimeline(startDate),
-    getCompletedTimeline(startDate),
+    getCreatedTimeline(firebaseUid, startDate),
+    getCompletedTimeline(firebaseUid, startDate),
   ]);
 
   const timeline = [];
@@ -121,10 +127,12 @@ const getTimeline = async (period: StatisticsPeriod) => {
   return timeline;
 };
 
-export const getStatistics = async (req: Request, res: Response) => {
+export const getStatistics = async (req: AuthRequest, res: Response) => {
   try {
+    const firebaseUid = req.user!.uid;
+
     const period = (req.query.period as StatisticsPeriod) || "week";
-    const cacheKey = `statistics-${period}`;
+    const cacheKey = `statistics-${period}-${firebaseUid}`;
 
     const cachedData = cache.get<StatisticsResponse>(cacheKey);
     if (cachedData) {
@@ -133,9 +141,9 @@ export const getStatistics = async (req: Request, res: Response) => {
 
     const [statusDistribution, priorityDistribution, timeline] =
       await Promise.all([
-        getStatusDistribution(),
-        getPriorityDistribution(),
-        getTimeline(period),
+        getStatusDistribution(firebaseUid),
+        getPriorityDistribution(firebaseUid),
+        getTimeline(firebaseUid, period),
       ]);
 
     const responseData: StatisticsResponse = {

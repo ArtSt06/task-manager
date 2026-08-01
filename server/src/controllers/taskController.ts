@@ -1,5 +1,6 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 
+import { AuthRequest } from "@middleware/auth";
 import { cache } from "@utils/cache";
 
 import Task from "@models/TaskModel";
@@ -11,15 +12,16 @@ const handleError = (res: Response, error: unknown) => {
   res.status(500).json({ message });
 };
 
-const invalidateStatisticsCache = () => {
-  cache.clear("statistics-");
+const invalidateStatisticsCache = (firebaseUid: string) => {
+  cache.clear(`statistics-${firebaseUid}`);
 };
 
-export const getAllTasks = async (req: Request, res: Response) => {
+export const getAllTasks = async (req: AuthRequest, res: Response) => {
   try {
+    const firebaseUid = req.user!.uid;
     const { status, priority, search } = req.query;
 
-    const filters: any = {};
+    const filters: any = { firebaseUid: firebaseUid };
 
     if (status) {
       filters.status = status;
@@ -38,8 +40,9 @@ export const getAllTasks = async (req: Request, res: Response) => {
   }
 };
 
-export const createTask = async (req: Request, res: Response) => {
+export const createTask = async (req: AuthRequest, res: Response) => {
   try {
+    const firebaseUid = req.user!.uid;
     const { title, description, priority, status, deadline } = req.body;
 
     if (!title?.trim()) {
@@ -48,6 +51,7 @@ export const createTask = async (req: Request, res: Response) => {
     }
 
     const task = new Task({
+      firebaseUid: firebaseUid,
       title: title.trim(),
       description: description?.trim(),
       priority: priority,
@@ -56,7 +60,7 @@ export const createTask = async (req: Request, res: Response) => {
     });
 
     const savedTask = await task.save();
-    invalidateStatisticsCache();
+    invalidateStatisticsCache(firebaseUid);
     res
       .status(201)
       .json({ message: "Задача успешно создана", task: savedTask });
@@ -65,8 +69,9 @@ export const createTask = async (req: Request, res: Response) => {
   }
 };
 
-export const updateTask = async (req: Request, res: Response) => {
+export const updateTask = async (req: AuthRequest, res: Response) => {
   try {
+    const firebaseUid = req.user!.uid;
     const { id } = req.params;
     const { title, description, priority, status, deadline } = req.body;
 
@@ -88,35 +93,40 @@ export const updateTask = async (req: Request, res: Response) => {
       updates.deadline = deadline ? new Date(deadline) : null;
     }
 
-    const updatedTask = await Task.findByIdAndUpdate(id, updates, {
-      new: true,
-      runValidators: true,
-    });
+    const updatedTask = await Task.findOneAndUpdate(
+      { _id: id, firebaseUid: firebaseUid},
+      updates,
+      { new: true, runValidators: true },
+    );
 
     if (!updatedTask) {
       res.status(404).json({ message: "Задача не найдена" });
       return;
     }
 
-    invalidateStatisticsCache();
+    invalidateStatisticsCache(firebaseUid);
     res.json({ message: "Задача успешно обновлена", task: updatedTask });
   } catch (error) {
     handleError(res, error);
   }
 };
 
-export const deleteTask = async (req: Request, res: Response) => {
+export const deleteTask = async (req: AuthRequest, res: Response) => {
   try {
+    const firebaseUid = req.user!.uid;
     const { id } = req.params;
 
-    const deletedTask = await Task.findByIdAndDelete(id);
+    const deletedTask = await Task.findOneAndDelete({
+      _id: id,
+      firebaseUid: firebaseUid,
+    });
 
     if (!deletedTask) {
       res.status(404).json({ message: "Задача не найдена" });
       return;
     }
 
-    invalidateStatisticsCache();
+    invalidateStatisticsCache(firebaseUid);
     res.json({ message: "Задача успешно удалена" });
   } catch (error) {
     handleError(res, error);

@@ -1,7 +1,9 @@
-import { Schema, model, Document } from "mongoose";
 import { Priority, Status } from "@shared/types";
 
+import { Schema, model, Document } from "mongoose";
+
 export interface TaskEntity extends Document {
+  firebaseUid: string;
   title: string;
   description?: string;
   priority: Priority;
@@ -13,6 +15,7 @@ export interface TaskEntity extends Document {
 
 const TaskSchema = new Schema<TaskEntity>(
   {
+    firebaseUid: { type: String, required: true, index: true },
     title: { type: String, required: true },
     description: { type: String },
     priority: {
