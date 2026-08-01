@@ -12,6 +12,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.12.0",
     "dayjs": "^1.11.21",
+    "firebase": "^12.17.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-icons": "^5.7.0",

@@ -3,11 +3,18 @@ import { FaTasks, FaChartBar, FaCog, FaPlus } from "react-icons/fa";
 
 import { useAppDispatch } from "@store/reduxHooks";
 import { openForm } from "@store/features/ui/uiSlice";
+import { useAuth } from "@contexts/AuthContext";
 
 import "./Sidebar.scss";
 
 const Sidebar = () => {
   const dispatch = useAppDispatch();
+
+  const { user, logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+  };
 
   const handleCreateTask = () => {
     dispatch(openForm());
@@ -46,6 +53,18 @@ const Sidebar = () => {
       <button className="sidebar-create-btn" onClick={handleCreateTask}>
         <FaPlus /> Создать задачу
       </button>
+
+      <div className="sidebar-footer">
+        {user && (
+          <div className="user-info">
+            <span className="user-email">{user.email}</span>
+
+            <button onClick={handleLogout} className="logout-button">
+              Выйти
+            </button>
+          </div>
+        )}
+      </div>
     </aside>
   );
 };

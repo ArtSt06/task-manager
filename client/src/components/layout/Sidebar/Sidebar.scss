@@ -89,4 +89,46 @@
       font-size: $font-size-base;
     }
   }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding-top: $spacing-md;
+    border-top: 1px solid var(--border-color);
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-sm;
+
+      .user-email {
+        font-size: $font-size-sm;
+        color: var(--text-secondary);
+        text-align: center;
+      }
+
+      .logout-button {
+        padding: $spacing-sm $spacing-md;
+
+        @include flex-center;
+        gap: $spacing-sm;
+
+        border: 1px solid var(--border-color);
+        border-radius: $border-radius;
+
+        background: transparent;
+
+        font-size: $font-size-sm;
+        color: var(--text-secondary);
+
+        cursor: pointer;
+        transition: all $transition-duration;
+
+        &:hover {
+          background: var(--bg-hover);
+
+          color: var(--text-primary);
+        }
+      }
+    }
+  }
 }
