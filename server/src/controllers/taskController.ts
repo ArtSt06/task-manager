@@ -132,3 +132,15 @@ export const deleteTask = async (req: AuthRequest, res: Response) => {
     handleError(res, error);
   }
 };
+
+export const deleteAllTasks = async (req: AuthRequest, res: Response) => {
+  try {
+    const firebaseUid = req.user!.uid;
+    
+    const result = await Task.deleteMany({ firebaseUid });
+    invalidateStatisticsCache(firebaseUid);
+    res.json({ message: `Удалено ${result.deletedCount} задач` });
+  } catch (error) {
+    handleError(res, error);
+  }
+};
