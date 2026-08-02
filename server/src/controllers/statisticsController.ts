@@ -155,7 +155,6 @@ export const getStatistics = async (req: AuthRequest, res: Response) => {
     cache.set(cacheKey, responseData);
     res.json(responseData);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Ошибка при получении статистики" });
   }
 };

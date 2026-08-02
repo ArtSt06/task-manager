@@ -19,11 +19,14 @@ app.use("/api", taskRoutes);
 app.use("/api", statisticsRoutes);
 app.use("/api", userRoutes);
 
-const start = async () => {
-  await connectDB();
-  app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
-};
+if (require.main === module) {
+  const start = async () => {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  };
+  start();
+}
 
-start();
+export default app;

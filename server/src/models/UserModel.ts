@@ -4,7 +4,6 @@ import {
   THEMES,
   DEFAULT_SETTINGS,
   PRIORITIES,
-  STATUSES,
   DEFAULT_STATUSES,
 } from "@shared/constants";
 

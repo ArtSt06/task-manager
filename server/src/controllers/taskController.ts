@@ -1,12 +1,13 @@
 import { Response } from "express";
 
+import mongoose from "mongoose";
+
 import { AuthRequest } from "@middleware/auth";
 import { cache } from "@utils/cache";
 
 import Task from "@models/TaskModel";
 
 const handleError = (res: Response, error: unknown) => {
-  console.error(error);
   const message =
     error instanceof Error ? error.message : "Внутренняя ошибка сервера";
   res.status(500).json({ message });
@@ -73,6 +74,11 @@ export const updateTask = async (req: AuthRequest, res: Response) => {
   try {
     const firebaseUid = req.user!.uid;
     const { id } = req.params;
+
+    if (typeof id !== "string" || !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ message: "Задача не найдена" });
+    }
+
     const { title, description, priority, status, deadline } = req.body;
 
     const updates: any = {};
@@ -94,9 +100,9 @@ export const updateTask = async (req: AuthRequest, res: Response) => {
     }
 
     const updatedTask = await Task.findOneAndUpdate(
-      { _id: id, firebaseUid: firebaseUid},
+      { _id: id, firebaseUid: firebaseUid },
       updates,
-      { new: true, runValidators: true },
+      { returnDocument: "after", runValidators: true },
     );
 
     if (!updatedTask) {
@@ -115,6 +121,10 @@ export const deleteTask = async (req: AuthRequest, res: Response) => {
   try {
     const firebaseUid = req.user!.uid;
     const { id } = req.params;
+
+    if (typeof id !== "string" || !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ message: "Задача не найдена" });
+    }
 
     const deletedTask = await Task.findOneAndDelete({
       _id: id,
@@ -136,10 +146,10 @@ export const deleteTask = async (req: AuthRequest, res: Response) => {
 export const deleteAllTasks = async (req: AuthRequest, res: Response) => {
   try {
     const firebaseUid = req.user!.uid;
-    
+
     const result = await Task.deleteMany({ firebaseUid });
     invalidateStatisticsCache(firebaseUid);
-    res.json({ message: `Удалено ${result.deletedCount} задач` });
+    res.json({ message: `Задач удалено: ${result.deletedCount}` });
   } catch (error) {
     handleError(res, error);
   }

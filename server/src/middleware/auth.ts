@@ -31,7 +31,6 @@ export const authenticate = async (
 
     next();
   } catch (error) {
-    console.error("Auth error:", error);
     return res.status(401).json({ message: "Неверный или истёкший токен" });
   }
 };
