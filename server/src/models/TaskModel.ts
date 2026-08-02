@@ -1,6 +1,6 @@
 import type { Priority, Status } from "@shared/types";
 
-import { PRIORITIES, STATUSES } from "@shared/constants";
+import { PRIORITIES, STATUSES, DEFAULT_SETTINGS } from "@shared/constants";
 
 import { Schema, model, Document } from "mongoose";
 
@@ -28,12 +28,12 @@ const TaskSchema = new Schema<TaskEntity>(
     priority: {
       type: String,
       enum: PRIORITIES,
-      default: "medium",
+      default: DEFAULT_SETTINGS.defaultPriority,
     },
     status: {
       type: String,
       enum: STATUSES,
-      default: "todo",
+      default: DEFAULT_SETTINGS.defaultStatus,
     },
 
     deadline: { type: Date },

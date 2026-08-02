@@ -5,11 +5,10 @@ import {
   DEFAULT_SETTINGS,
   PRIORITIES,
   STATUSES,
+  DEFAULT_STATUSES,
 } from "@shared/constants";
 
 import { Schema, model, Document } from "mongoose";
-
-const DEFAULT_STATUSES = STATUSES.filter((status) => status !== "done");
 
 export interface UserEntity extends Document {
   firebaseUid: string;

@@ -4,6 +4,8 @@ export const PRIORITIES: Priority[] = ["low", "medium", "high"];
 
 export const STATUSES: Status[] = ["todo", "inProgress", "done"];
 
+export const DEFAULT_STATUSES = STATUSES.filter((status) => status !== "done");
+
 export const PRIORITY_LABELS: Record<Priority, string> = {
   low: "Низкий",
   medium: "Средний",
