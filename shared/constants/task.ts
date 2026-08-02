@@ -1,6 +1,7 @@
-import type { Priority, Status } from "../types/task.types";
+import type { Priority, Status } from "@shared/types/task.types";
 
 export const PRIORITIES: Priority[] = ["low", "medium", "high"];
+
 export const STATUSES: Status[] = ["todo", "inProgress", "done"];
 
 export const PRIORITY_LABELS: Record<Priority, string> = {

@@ -6,6 +6,7 @@ import { connectDB } from "@config/databaseConfig";
 
 import taskRoutes from "@routes/taskRoutes";
 import statisticsRoutes from "@routes/statisticsRoutes";
+import userRoutes from "@routes/userRoutes";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/api", taskRoutes);
 app.use("/api", statisticsRoutes);
+app.use("/api", userRoutes);
 
 const start = async () => {
   await connectDB();
