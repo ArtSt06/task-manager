@@ -6,7 +6,7 @@ interface LoaderProps {
 }
 
 const Loader = ({ fullPage = false, text = "Загрузка..." }: LoaderProps) => {
-  const className = "loader" + fullPage ? "loader-fullpage" : "";
+  const className = `loader ${fullPage ? 'loader-fullpage' : ''}`;
 
   return (
     <div className={className}>

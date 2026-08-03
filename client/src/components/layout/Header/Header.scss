@@ -1,82 +1,51 @@
-@use "@styles/abstracts/variables" as *;
-@use "@styles/abstracts/mixins" as *;
+@use '@styles/abstracts/variables' as *;
+@use '@styles/abstracts/mixins' as *;
 
 .header {
-  min-height: $header-height;
-  padding: $spacing-md $spacing-lg;
-
   @include flex-space-between;
-  gap: $spacing-md;
-
-  border-bottom: 1px solid var(--border-color);
-
+  padding: $spacing-md $spacing-lg;
   background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  min-height: $header-height;
 
-  &-search {
-    position: relative;
-
-    max-width: 400px;
-
-    flex: 1;
-
-    .search-icon {
-      position: absolute;
-      left: $spacing-md;
-      top: 50%;
-
-      transform: translateY(-50%);
-
-      font-size: $font-size-base;
-      color: var(--text-secondary);
-    }
-
-    input {
-      width: 100%;
-      padding: $spacing-sm $spacing-md $spacing-sm $spacing-xl;
-
-      border: 1px solid var(--border-color);
-      border-radius: $border-radius;
-      outline: none;
-
-      background: var(--bg-input);
-
-      font-size: $font-size-sm;
-      color: var(--text-primary);
-
-      transition: border-color $transition-duration;
-
-      &::placeholder {
-        color: var(--text-muted);
-      }
-
-      &:focus {
-        border-color: var(--primary-color);
-      }
-    }
+  &-left {
+    display: flex;
+    align-items: center;
   }
 
-  &-filters {
+  &-title {
+    font-size: $font-size-lg;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  &-right {
     display: flex;
+    align-items: center;
     gap: $spacing-md;
+  }
 
-    select {
-      min-width: 140px;
-      padding: $spacing-sm $spacing-md;
+  &-create-btn {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $spacing-sm $spacing-lg;
+    border: none;
+    border-radius: $border-radius;
+    background: var(--primary-color);
+    color: #fff;
+    font-weight: 600;
+    font-size: $font-size-sm;
+    cursor: pointer;
+    transition: background $transition-duration;
 
-      border: 1px solid var(--border-color);
-      border-radius: $border-radius;
-      outline: none;
+    &:hover {
+      background: var(--primary-hover);
+    }
 
-      background: var(--bg-input);
-
-      font-size: $font-size-sm;
-      color: var(--text-primary);
-
-      cursor: pointer;
-
-      &:focus {
-        border-color: var(--primary-color);
-      }
+    svg {
+      font-size: 14px;
     }
   }
 }

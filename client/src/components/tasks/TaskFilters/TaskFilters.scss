@@ -1,0 +1,54 @@
+@use '@styles/abstracts/variables' as *;
+@use '@styles/abstracts/mixins' as *;
+
+.task-filters {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+  flex-wrap: wrap;
+
+  &-search {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+
+    .search-icon {
+      position: absolute;
+      left: $spacing-md;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+    }
+
+    input {
+      width: 100%;
+      padding: $spacing-sm $spacing-md $spacing-sm $spacing-xl;
+      border: 1px solid var(--border-color);
+      border-radius: $border-radius;
+      background: var(--bg-input);
+      color: var(--text-primary);
+      font-size: $font-size-sm;
+      outline: none;
+      transition: border-color $transition-duration;
+
+      &::placeholder {
+        color: var(--text-muted);
+      }
+
+      &:focus {
+        border-color: var(--primary-color);
+      }
+    }
+  }
+
+  &-selects {
+    display: flex;
+    gap: $spacing-sm;
+    flex-wrap: wrap;
+
+    .filter-select {
+      min-width: 140px;
+    }
+  }
+}
