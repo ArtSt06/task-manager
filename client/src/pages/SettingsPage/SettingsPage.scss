@@ -1,1 +1,14 @@
-/* Стили для страницы с настройками */
+@use '@styles/abstracts/variables' as *;
+@use '@styles/abstracts/mixins' as *;
+
+.settings-page {
+  max-width: 640px;
+  margin: 0 auto;
+
+  h2 {
+    font-size: $font-size-xl;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: $spacing-lg;
+  }
+}

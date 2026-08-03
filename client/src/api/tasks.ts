@@ -39,3 +39,7 @@ export const updateTask = async (
 export const deleteTask = async (id: string): Promise<TaskMutationResponse> => {
   return apiClient.delete<TaskMutationResponse>(`${TASKS_ENDPOINT}/${id}`);
 };
+
+export const deleteAllTasks = async (): Promise<TaskMutationResponse> => {
+  return apiClient.delete<TaskMutationResponse>(TASKS_ENDPOINT);
+};

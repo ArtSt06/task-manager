@@ -1,0 +1,106 @@
+@use "@styles/abstracts/variables" as *;
+@use "@styles/abstracts/mixins" as *;
+
+.security {
+  .settings-section {
+    margin-bottom: $spacing-lg;
+    padding: $spacing-lg;
+
+    border: 1px solid var(--border-color);
+    border-radius: $border-radius;
+
+    background: var(--bg-card);
+
+    h3 {
+      margin-bottom: $spacing-md;
+      padding-bottom: $spacing-sm;
+
+      border-bottom: 1px solid var(--border-color);
+
+      font-size: $font-size-md;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .setting-group {
+      &.actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $spacing-sm;
+
+        button {
+          padding: $spacing-sm $spacing-md;
+
+          border-radius: $border-radius;
+          border: 1px solid var(--border-color);
+
+          background: var(--bg-input);
+
+          font-size: $font-size-sm;
+          color: var(--text-secondary);
+
+          cursor: pointer;
+          transition: all $transition-duration;
+
+          &:hover:not(:disabled) {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+          }
+          &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+
+    .settings-form {
+      margin-top: $spacing-md;
+
+      @include flex-column;
+      gap: $spacing-sm;
+
+      input {
+        padding: $spacing-sm $spacing-md;
+
+        border: 1px solid var(--border-color);
+        border-radius: $border-radius;
+        outline: none;
+
+        background: var(--bg-input);
+
+        font-size: $font-size-sm;
+        color: var(--text-primary);
+
+        &:focus {
+          border-color: var(--primary-color);
+        }
+        &:disabled {
+          opacity: 0.6;
+        }
+      }
+      button {
+        padding: $spacing-sm $spacing-md;
+
+        align-self: flex-start;
+
+        border: none;
+        border-radius: $border-radius;
+
+        background: var(--primary-color);
+
+        font-weight: 600;
+        color: #fff;
+
+        cursor: pointer;
+        &:hover:not(:disabled) {
+          background: var(--primary-hover);
+        }
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}

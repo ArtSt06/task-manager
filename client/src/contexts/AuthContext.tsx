@@ -9,10 +9,11 @@ import {
   signOut,
   sendPasswordResetEmail,
 } from "firebase/auth";
-import { FirebaseError } from "firebase/app";
 
 import { auth } from "@firebase_setup/firebase";
-import { getFirebaseErrorMessage } from "@utils/firebaseErrors";
+import { handleFirebaseError } from "@utils/getFirebaseError";
+import { useAppDispatch } from "@store/reduxHooks";
+import { fetchSettings } from "@store/features/settings/settingsSlice";
 
 interface AuthContextType {
   user: User | null;
@@ -28,49 +29,48 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
+      if (firebaseUser) {
+        dispatch(fetchSettings());
+      }
       setLoading(false);
     });
     return unsubscribe;
-  }, []);
+  }, [dispatch]);
 
   const signIn = async (email: string, password: string) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-    } catch (error: unknown) {
-      if (error instanceof FirebaseError) {
-        throw new Error(getFirebaseErrorMessage(error.code), { cause: error });
-      }
-      throw new Error("Произошла неизвестная ошибка", { cause: error });
+    } catch (error) {
+      handleFirebaseError(error);
     }
   };
 
   const signUp = async (email: string, password: string) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-    } catch (error: unknown) {
-      if (error instanceof FirebaseError) {
-        throw new Error(getFirebaseErrorMessage(error.code), { cause: error });
-      }
-      throw new Error("Произошла неизвестная ошибка", { cause: error });
+    } catch (error) {
+      handleFirebaseError(error);
     }
   };
 
   const logout = async () => {
-    await signOut(auth);
+    try {
+      await signOut(auth);
+    } catch (error) {
+      handleFirebaseError(error);
+    }
   };
 
   const resetPassword = async (email: string) => {
     try {
       await sendPasswordResetEmail(auth, email);
-    } catch (error: unknown) {
-      if (error instanceof FirebaseError) {
-        throw new Error(getFirebaseErrorMessage(error.code), { cause: error });
-      }
-      throw new Error("Произошла неизвестная ошибка", { cause: error });
+    } catch (error) {
+      handleFirebaseError(error);
     }
   };
 

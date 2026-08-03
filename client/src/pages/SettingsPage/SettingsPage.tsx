@@ -1,10 +1,19 @@
+import UserPreferences from "@components/settings/UserPreferences";
+import DataManagement from "@components/settings/DataManagement";
+import Security from "@components/settings/Security";
+
+import "./SettingsPage.scss";
+
 const SettingsPage = () => {
   return (
-    <div>
+    <div className="settings-page">
       <h2>Настройки</h2>
-      <p>
-        Здесь будут настройки приложения.
-      </p>
+
+      <UserPreferences />
+
+      <DataManagement />
+
+      <Security />
     </div>
   );
 };

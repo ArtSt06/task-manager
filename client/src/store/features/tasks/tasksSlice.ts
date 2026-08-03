@@ -3,7 +3,7 @@ import type { Task } from "@shared/types";
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { getTasks, createTask, updateTask, deleteTask } from "@api/tasks";
+import { getTasks, createTask, updateTask, deleteTask, deleteAllTasks } from "@api/tasks";
 
 export const fetchTasks = createAsyncThunk(
   "tasks/fetchTasks",
@@ -33,6 +33,13 @@ export const removeTask = createAsyncThunk(
   async (id: string) => {
     await deleteTask(id);
     return id;
+  },
+);
+
+export const removeAllTasks = createAsyncThunk(
+  "tasks/removeAllTasks",
+  async () => {
+    await deleteAllTasks();
   },
 );
 
@@ -99,6 +106,12 @@ const tasksSlice = createSlice({
       })
       .addCase(removeTask.fulfilled, (state, action) => {
         state.items = state.items.filter((task) => task._id !== action.payload);
+      })
+      .addCase(removeAllTasks.fulfilled, (state) => {
+        state.items = [];
+      })
+      .addCase(removeAllTasks.rejected, (state, action) => {
+        state.error = action.error.message || "Ошибка удаления задач";
       });
   },
 });

@@ -10,3 +10,7 @@ export interface Settings {
 
   confirmDelete: boolean;
 }
+
+export interface SettingsResponse {
+  settings: Settings;
+}

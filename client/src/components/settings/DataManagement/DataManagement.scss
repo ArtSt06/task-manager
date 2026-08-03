@@ -1,0 +1,69 @@
+@use "@styles/abstracts/variables" as *;
+@use "@styles/abstracts/mixins" as *;
+
+.data-management {
+  .settings-section {
+    margin-bottom: $spacing-lg;
+    padding: $spacing-lg;
+
+    border: 1px solid var(--border-color);
+    border-radius: $border-radius;
+
+    background: var(--bg-card);
+
+    h3 {
+      margin-bottom: $spacing-md;
+      padding-bottom: $spacing-sm;
+
+      border-bottom: 1px solid var(--border-color);
+
+      font-size: $font-size-md;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .setting-group {
+      &.actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $spacing-sm;
+
+        button {
+          padding: $spacing-sm $spacing-md;
+
+          border-radius: $border-radius;
+          border: 1px solid var(--border-color);
+
+          background: var(--bg-input);
+
+          font-size: $font-size-sm;
+          color: var(--text-secondary);
+
+          cursor: pointer;
+          transition: all $transition-duration;
+
+          &:hover:not(:disabled) {
+            background: var(--bg-hover);
+
+            color: var(--text-primary);
+          }
+
+          &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+          }
+
+          &.btn-danger {
+            border-color: var(--priority-high);
+
+            color: var(--priority-high);
+
+            &:hover:not(:disabled) {
+              background: var(--priority-high-bg);
+            }
+          }
+        }
+      }
+    }
+  }
+}

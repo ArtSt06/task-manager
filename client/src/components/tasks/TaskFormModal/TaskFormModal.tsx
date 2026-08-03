@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import { useAppDispatch, useAppSelector } from "@store/reduxHooks";
 import { addTask, editTask } from "@store/features/tasks/tasksSlice";
 import { closeForm } from "@store/features/ui/uiSlice";
@@ -45,7 +44,7 @@ const TaskFormModal = () => {
 
   const handleClose = () => dispatch(closeForm());
 
-  const handleSubmit = async (event: React.SubmitEvent) => {
+  const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!isValid()) {

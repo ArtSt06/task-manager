@@ -3,9 +3,10 @@ import type { Task } from "@shared/types";
 import { formatDate } from "@utils/date";
 import { PRIORITY_LABELS, STATUS_LABELS } from "@shared/constants";
 
-import { useAppDispatch } from "@store/reduxHooks";
+import { useAppDispatch, useAppSelector } from "@store/reduxHooks";
 import { openForm } from "@store/features/ui/uiSlice";
 import { removeTask } from "@store/features/tasks/tasksSlice";
+import { selectConfirmDelete } from "@store/features/settings/settingsSelectors";
 
 import "./TaskItem.scss";
 
@@ -15,13 +16,16 @@ interface TaskItemProps {
 
 const TaskItem = ({ task }: TaskItemProps) => {
   const dispatch = useAppDispatch();
+  const confirmDelete = useAppSelector(selectConfirmDelete);
 
   const handleEdit = () => {
     dispatch(openForm(task._id));
   };
 
   const handleDelete = () => {
-    if (!window.confirm(`Удалить задачу "${task.title}"?`)) return;
+    if (confirmDelete) {
+      if (!window.confirm(`Удалить задачу "${task.title}"?`)) return;
+    }
     dispatch(removeTask(task._id));
   };
 
