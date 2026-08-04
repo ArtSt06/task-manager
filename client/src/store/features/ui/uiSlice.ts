@@ -42,16 +42,16 @@ const uiSlice = createSlice({
   name: "ui",
   initialState,
   reducers: {
-    openTaskForm: (state, action: PayloadAction<string | null>) => {
+    openTaskForm: (state, action: PayloadAction<Omit<TaskFormState, "isOpen">>) => {
       state.taskForm.isOpen = true;
-      state.taskForm.editingTaskId = action.payload;
+      state.taskForm.editingTaskId = action.payload.editingTaskId;
     },
     closeTaskForm: (state) => {
       state.taskForm.isOpen = false;
       state.taskForm.editingTaskId = null;
     },
 
-    showConfirm: (state, action: PayloadAction<ConfirmState>) => {
+    showConfirm: (state, action: PayloadAction<Omit<ConfirmState, "isOpen">>) => {
       state.confirm.isOpen = true;
       state.confirm.onConfirm = action.payload.onConfirm;
       state.confirm.message = action.payload.message;
