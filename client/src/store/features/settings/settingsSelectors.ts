@@ -7,7 +7,6 @@ export const selectDefaultPriority = (state: RootState) =>
 export const selectDefaultStatus = (state: RootState) =>
   state.settings.defaultStatus;
 export const selectConfirmDelete = (state: RootState) =>
-  
   state.settings.confirmDelete;
 export const selectSettingsLoading = (state: RootState) =>
   state.settings.loading;
