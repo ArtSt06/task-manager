@@ -1,4 +1,4 @@
-import type { Theme, Settings } from "@shared/types/settings.types";
+import type { Theme, Settings } from "../types/settings.types";
 
 export const THEMES: Theme[] = ["light", "dark", "system"];
 

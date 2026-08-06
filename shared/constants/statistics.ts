@@ -1,4 +1,4 @@
-import type { StatisticsPeriod } from "@shared/types/statistics.types";
+import type { StatisticsPeriod } from "../types/statistics.types";
 
 export const STATISTICS_PERIODS: StatisticsPeriod[] = ["week", "month"];
 

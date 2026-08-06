@@ -1,4 +1,4 @@
-import type { Priority, Status } from "@shared/types/task.types";
+import type { Priority, Status } from "./task.types";
 
 export type StatisticsPeriod = "week" | "month";
 

@@ -1,4 +1,4 @@
-import type { Priority, Status } from "@shared/types/task.types";
+import type { Priority, Status } from "../types/task.types";
 
 export const PRIORITIES: Priority[] = ["low", "medium", "high"];
 
