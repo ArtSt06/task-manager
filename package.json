@@ -3,12 +3,16 @@
   "version": "1.0.0",
   "scripts": {
     "install:all": "npm install --prefix client && npm install --prefix server",
+    "setup": "npm run install:all && cp client/.env.example client/.env && cp server/.env.example server/.env",
+    
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "npm run serve --prefix server",
     "dev:client": "npm run dev --prefix client",
+
     "build": "npm run build:client && npm run build:server",
     "build:client": "npm run build --prefix client",
     "build:server": "npm run build --prefix server",
+    
     "start": "npm run start --prefix server"
   },
   "devDependencies": {
