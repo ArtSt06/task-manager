@@ -31,7 +31,6 @@ const config: JestConfigWithTsJest = {
     ],
   },
   moduleDirectories: ["node_modules", "src"],
-  // Добавляем, чтобы не игнорировать наши файлы (на случай, если нужно)
   transformIgnorePatterns: [
     "/node_modules/(?!react-router-dom|@firebase|firebase)",
   ],
