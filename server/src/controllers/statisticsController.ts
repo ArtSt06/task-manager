@@ -132,7 +132,7 @@ export const getStatistics = async (req: AuthRequest, res: Response) => {
     const firebaseUid = req.user!.uid;
 
     const period = (req.query.period as StatisticsPeriod) || "week";
-    const cacheKey = `statistics-${period}-${firebaseUid}`;
+    const cacheKey = `statistics-${firebaseUid}-${period}`;
 
     const cachedData = cache.get<StatisticsResponse>(cacheKey);
     if (cachedData) {
