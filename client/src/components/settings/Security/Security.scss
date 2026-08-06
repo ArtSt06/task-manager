@@ -2,61 +2,19 @@
 @use "@styles/abstracts/mixins" as *;
 
 .security {
-  .settings-section {
-    margin-bottom: $spacing-lg;
-    padding: $spacing-lg;
+  grid-area: Security;
 
-    border: 1px solid var(--border-color);
-    border-radius: $border-radius;
+  .settings-form {
+    position: relative;
 
-    background: var(--bg-card);
+    @include flex-column;
+    gap: $spacing-sm;
 
-    h3 {
-      margin-bottom: $spacing-md;
-      padding-bottom: $spacing-sm;
-
-      border-bottom: 1px solid var(--border-color);
-
-      font-size: $font-size-md;
-      font-weight: 600;
-      color: var(--text-primary);
+    .form-assets {
+      padding: $spacing-sm;
     }
 
-    .setting-group {
-      &.actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: $spacing-sm;
-
-        button {
-          padding: $spacing-sm $spacing-md;
-
-          border-radius: $border-radius;
-          border: 1px solid var(--border-color);
-
-          background: var(--bg-input);
-
-          font-size: $font-size-sm;
-          color: var(--text-secondary);
-
-          cursor: pointer;
-          transition: all $transition-duration;
-
-          &:hover:not(:disabled) {
-            background: var(--bg-hover);
-            color: var(--text-primary);
-          }
-          &:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-          }
-        }
-      }
-    }
-
-    .settings-form {
-      margin-top: $spacing-md;
-
+    .form-inputs {
       @include flex-column;
       gap: $spacing-sm;
 
@@ -79,27 +37,43 @@
           opacity: 0.6;
         }
       }
+    }
+
+    button {
+      position: absolute;
+      top: $spacing-xs;
+      right: $spacing-md;
+      transform: translateY(50%);
+
+      padding: $spacing-sm $spacing-md;
+
+      border: none;
+      border-radius: $border-radius;
+
+      background: var(--primary-color);
+
+      font-weight: 600;
+      color: rgba(255, 255, 255, 1);
+
+      cursor: pointer;
+
+      &:hover:not(:disabled) {
+        background: var(--primary-hover);
+      }
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+@include mobile-small {
+  .security {
+    .settings-form {
       button {
-        padding: $spacing-sm $spacing-md;
-
-        align-self: flex-start;
-
-        border: none;
-        border-radius: $border-radius;
-
-        background: var(--primary-color);
-
-        font-weight: 600;
-        color: #fff;
-
-        cursor: pointer;
-        &:hover:not(:disabled) {
-          background: var(--primary-hover);
-        }
-        &:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-        }
+        position: static;
+        transform: translateY(0);
       }
     }
   }

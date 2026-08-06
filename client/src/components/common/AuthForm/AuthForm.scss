@@ -13,6 +13,9 @@
     width: 100%;
     padding: $spacing-xl;
 
+    @include flex-column;
+    gap: $spacing-lg;
+
     border: 1px solid var(--border-color);
     border-radius: $border-radius * 2;
 
@@ -21,88 +24,78 @@
     box-shadow: $shadow-lg;
 
     h2 {
-      margin-bottom: $spacing-lg;
-
       font-size: $font-size-xl;
       font-weight: 600;
       text-align: center;
       color: var(--text-primary);
     }
 
-    .form-group {
-      margin-bottom: $spacing-md;
+    form {
+      @include flex-column;
+      gap: $spacing-md;
 
-      label {
-        margin-bottom: $spacing-xs;
+      .form-group {
+        @include flex-column;
+        gap: $spacing-md;
 
-        display: block;
+        label {
+          font-size: $font-size-sm;
+          font-weight: 500;
+          color: var(--text-secondary);
+        }
 
-        font-size: $font-size-sm;
-        font-weight: 500;
-        color: var(--text-secondary);
+        input {
+          width: 100%;
+          padding: $spacing-sm $spacing-md;
+
+          border: 1px solid var(--border-color);
+          border-radius: $border-radius;
+          outline: none;
+
+          background: var(--bg-input);
+
+          font-size: $font-size-sm;
+          color: var(--text-primary);
+
+          transition: border-color $transition-duration;
+
+          &:focus {
+            border-color: var(--primary-color);
+          }
+
+          &:disabled {
+            opacity: 0.6;
+          }
+        }
       }
 
-      input {
+      button {
         width: 100%;
         padding: $spacing-sm $spacing-md;
 
-        border: 1px solid var(--border-color);
+        border: none;
         border-radius: $border-radius;
-        outline: none;
 
-        background: var(--bg-input);
+        background: var(--primary-color);
 
+        font-weight: 600;
         font-size: $font-size-sm;
-        color: var(--text-primary);
+        color: rgba(255, 255, 255, 1);
 
-        transition: border-color $transition-duration;
+        cursor: pointer;
 
-        &:focus {
-          border-color: var(--primary-color);
+        &:hover:not(:disabled) {
+          background: var(--primary-hover);
         }
 
         &:disabled {
           opacity: 0.6;
+          cursor: not-allowed;
         }
       }
     }
 
-    .error {
-      margin-bottom: $spacing-md;
-
-      font-size: $font-size-sm;
-      text-align: center;
-      color: var(--priority-high);
-    }
-
-    button {
-      width: 100%;
-      padding: $spacing-sm $spacing-md;
-
-      border: none;
-      border-radius: $border-radius;
-
-      background: var(--primary-color);
-
-      font-weight: 600;
-      font-size: $font-size-sm;
-      color: rgba(255, 255, 255, 1);
-
-      cursor: pointer;
-
-      &:hover:not(:disabled) {
-        background: var(--primary-hover);
-      }
-
-      &:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
-    }
-
     p {
-      margin-top: $spacing-md;
-
       font-size: $font-size-sm;
       text-align: center;
       color: var(--text-secondary);

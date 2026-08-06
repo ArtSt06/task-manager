@@ -19,7 +19,7 @@ export const useAction = <T, Args extends unknown[] = unknown[]>(
     async (...args: Args): Promise<ActionResult<T>> => {
       setLoading(true);
       setError(null);
-      
+
       try {
         const result = await action(...args);
         setData(result);

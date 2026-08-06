@@ -2,12 +2,13 @@
 @use "@styles/abstracts/mixins" as *;
 
 .time-chart {
-  .chart-header {
-    margin-bottom: $spacing-md;
+  @include flex-column;
+  gap: $spacing-md;
 
+  .chart-header {
     @include flex-space-between;
 
-    h3 {
+    .chart-title {
       font-size: $font-size-md;
       font-weight: 600;
       color: var(--text-primary);
@@ -47,27 +48,6 @@
   }
 
   .chart-wrapper {
-    position: relative;
-
-    .chart-loading-overlay {
-      position: absolute;
-      z-index: 10;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-
-      @include flex-center;
-
-      border-radius: $border-radius;
-
-      background: rgba(0, 0, 0, 0.05);
-      backdrop-filter: blur(2px);
-
-      font-size: $font-size-sm;
-      color: var(--text-secondary);
-
-      pointer-events: none;
-    }
+    height: 280px;
   }
 }

@@ -68,22 +68,27 @@ const TaskFilters = ({ onFilterChange, filters }: TaskFiltersProps) => {
     <div className="task-filters">
       <div className="task-filters-search">
         <FaSearch className="search-icon" />
+
         <input
+          id="search"
           type="text"
           placeholder="Поиск задач..."
           value={searchQuery}
-          onChange={(e) => handleSearchChange(e.target.value)}
+          onChange={(event) => handleSearchChange(event.target.value)}
         />
       </div>
 
       <div className="task-filters-selects">
         <CustomSelect
+          id="statusFilter"
           value={filters.status || ""}
           onChange={handleStatusChange}
           options={statusOptions}
           className="filter-select"
         />
+
         <CustomSelect
+          id="priorityFilter"
           value={filters.priority || ""}
           onChange={handlePriorityChange}
           options={priorityOptions}

@@ -1,8 +1,11 @@
+import toast from "react-hot-toast";
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
 
 import { useAuth } from "@contexts/AuthContext";
+import { getFirebaseErrorMessage } from "@utils/getFirebaseError";
 
 import "./AuthForm.scss";
 
@@ -14,7 +17,6 @@ const AuthForm = ({ mode }: AuthFormProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { signIn, signUp } = useAuth();
 
@@ -24,15 +26,9 @@ const AuthForm = ({ mode }: AuthFormProps) => {
 
   const handleSubmit = async (event: React.SubmitEvent) => {
     event.preventDefault();
-    setError("");
 
     if (!isLogin && password !== confirmPassword) {
-      setError("Пароли не совпадают");
-      return;
-    }
-
-    if (!isLogin && password.length < 6) {
-      setError("Пароль должен быть не менее 6 символов");
+      toast.error("Пароли не совпадают");
       return;
     }
 
@@ -44,13 +40,16 @@ const AuthForm = ({ mode }: AuthFormProps) => {
       } else {
         await signUp(email, password);
       }
+
       navigate("/");
     } catch (error: unknown) {
       let message = isLogin ? "Ошибка входа" : "Ошибка регистрации";
-      if (error instanceof FirebaseError || error instanceof Error) {
-        message = error.message;
+
+      if (error instanceof FirebaseError) {
+        message = getFirebaseErrorMessage(error.code);
       }
-      setError(message);
+
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -60,41 +59,47 @@ const AuthForm = ({ mode }: AuthFormProps) => {
     <div className="auth-page">
       <div className="auth-card">
         <h2>{isLogin ? "Вход" : "Регистрация"}</h2>
-        <form onSubmit={handleSubmit}>
+        <form noValidate onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Email</label>
+            <label htmlFor="email">Email</label>
             <input
+              id="email"
+              name="email"
               type="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              required
               disabled={loading}
+              autoComplete="email"
             />
           </div>
+
           <div className="form-group">
-            <label>Пароль</label>
+            <label htmlFor="password">Пароль</label>
             <input
+              id="password"
+              name="password"
               type="password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              required
               disabled={loading}
               minLength={6}
             />
           </div>
+
           {!isLogin && (
             <div className="form-group">
-              <label>Подтвердите пароль</label>
+              <label htmlFor="confirmPassword">Подтвердите пароль</label>
               <input
+                id="confirmPassword"
+                name="confirmPassword"
                 type="password"
                 value={confirmPassword}
                 onChange={(event) => setConfirmPassword(event.target.value)}
-                required
                 disabled={loading}
               />
             </div>
           )}
-          {error && <div className="error">{error}</div>}
+
           <button type="submit" disabled={loading}>
             {loading
               ? isLogin
@@ -105,6 +110,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
                 : "Зарегистрироваться"}
           </button>
         </form>
+
         <p>
           {isLogin ? (
             <>

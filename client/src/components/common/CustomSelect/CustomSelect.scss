@@ -5,11 +5,19 @@
   position: relative;
   width: 100%;
 
+  .hidden-select {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
   .custom-select-trigger {
     position: relative;
 
     min-height: 40px;
-    padding: 8px 14px;
+    padding: $spacing-sm $spacing-md;
 
     @include flex-space-between;
 
@@ -35,12 +43,12 @@
     &::after {
       content: "▾";
 
-      margin-left: 8px;
+      margin-left: $spacing-sm;
 
-      font-size: 18px;
+      font-size: $font-size-md;
       color: var(--text-secondary);
 
-      transition: transform $transition-duration;
+      transition: transform 0.4s;
     }
 
     &.open::after {
@@ -60,12 +68,12 @@
   .custom-select-options {
     position: absolute;
     z-index: 100;
-    top: calc(100% + 4px);
+    top: calc(100% + $spacing-xs);
     left: 0;
     right: 0;
 
     max-height: 200px;
-    padding: 4px 0;
+    padding: $spacing-xs 0;
 
     border: 1px solid var(--border-color);
     border-radius: $border-radius;
@@ -78,7 +86,7 @@
     animation: dropdown-fade 0.15s ease;
 
     li {
-      padding: 8px 14px;
+      padding: $spacing-sm $spacing-md;
 
       font-size: $font-size-sm;
       color: var(--text-primary);

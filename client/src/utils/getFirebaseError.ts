@@ -8,9 +8,9 @@ export const getFirebaseErrorMessage = (errorCode: string): string => {
   );
 };
 
-export const handleFirebaseError = (error: unknown): never => {
+export const getFirebaseError = (error: unknown): string => {
   if (error instanceof FirebaseError) {
-    throw new Error(getFirebaseErrorMessage(error.code), { cause: error });
+    return getFirebaseErrorMessage(error.code);
   }
-  throw new Error("Произошла неизвестная ошибка", { cause: error });
+  return "Произошла неизвестная ошибка";
 };

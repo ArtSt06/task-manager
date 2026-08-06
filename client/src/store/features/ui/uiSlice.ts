@@ -12,7 +12,6 @@ interface TaskFormState extends Modal {
 
 interface ConfirmState extends Modal {
   message: string;
-  onConfirm: () => void;
   title?: string;
   confirmText?: string;
   cancelText?: string;
@@ -34,7 +33,6 @@ const initialState: UIState = {
     title: "",
     confirmText: "",
     cancelText: "",
-    onConfirm: () => {},
   },
 };
 
@@ -42,7 +40,10 @@ const uiSlice = createSlice({
   name: "ui",
   initialState,
   reducers: {
-    openTaskForm: (state, action: PayloadAction<Omit<TaskFormState, "isOpen">>) => {
+    openTaskForm: (
+      state,
+      action: PayloadAction<Omit<TaskFormState, "isOpen">>,
+    ) => {
       state.taskForm.isOpen = true;
       state.taskForm.editingTaskId = action.payload.editingTaskId;
     },
@@ -51,9 +52,11 @@ const uiSlice = createSlice({
       state.taskForm.editingTaskId = null;
     },
 
-    showConfirm: (state, action: PayloadAction<Omit<ConfirmState, "isOpen">>) => {
+    showConfirm: (
+      state,
+      action: PayloadAction<Omit<ConfirmState, "isOpen">>,
+    ) => {
       state.confirm.isOpen = true;
-      state.confirm.onConfirm = action.payload.onConfirm;
       state.confirm.message = action.payload.message;
       state.confirm.title = action.payload.title || "Модальное окно";
       state.confirm.confirmText = action.payload.confirmText || "Подтвердить";

@@ -8,6 +8,7 @@ import { fetchTasks } from "@store/features/tasks/tasksSlice";
 import { selectAllTasks } from "@store/features/tasks/tasksSelectors";
 
 import Loader from "@components/common/Loader";
+import ErrorDisplay from "@components/common/ErrorDisplay";
 import TimeChart from "@components/statistics/TimeChart";
 import StatusChart from "@components/statistics/StatusChart";
 import PriorityChart from "@components/statistics/PriorityChart";
@@ -19,7 +20,7 @@ const StatisticsPage = () => {
   const dispatch = useAppDispatch();
   const tasks = useAppSelector(selectAllTasks);
   const [period, setPeriod] = useState<StatisticsPeriod>("week");
-  const { data, loading, error } = useStatistics(period);
+  const { data, loading, error, refetch } = useStatistics(period);
 
   useEffect(() => {
     if (tasks.length === 0) {
@@ -27,22 +28,36 @@ const StatisticsPage = () => {
     }
   }, [dispatch, tasks.length]);
 
-  if (!data && loading)
-    return <Loader fullPage text="Загрузка статистики..." />;
-  if (error) return <div className="error">Ошибка: {error}</div>;
-  if (!data) return <Loader fullPage text="Загрузка статистики..." />;
+  useEffect(() => {
+    if (tasks.length > 0) {
+      refetch();
+    }
+  }, [tasks.length, refetch]);
+
+  if (error) {
+    return (
+      <ErrorDisplay
+        title="Ошибка загрузки статистики"
+        message={error}
+        fullPage={true}
+        onRetry={refetch}
+      />
+    );
+  }
+
+  if (!data) return <Loader />;
 
   return (
-    <div className="statistics-page">
-      <h2>Статистика задач</h2>
+    <div className="statistics-page page">
+      <h2 className="page-title">Статистика задач</h2>
 
       <div className="charts-grid">
         <div className="top-row">
-          <div className="summary-block">
+          <div className="statistics-container">
             <RecentActivity />
           </div>
 
-          <div className="time-chart-wrapper">
+          <div className="statistics-container">
             <TimeChart
               data={data.timeline}
               period={period}
@@ -52,10 +67,14 @@ const StatisticsPage = () => {
           </div>
         </div>
 
-        <div className="charts-row">
-          <StatusChart data={data.statusDistribution} />
+        <div className="bottom-row">
+          <div className="statistics-container">
+            <StatusChart data={data.statusDistribution} />
+          </div>
 
-          <PriorityChart data={data.priorityDistribution} />
+          <div className="statistics-container">
+            <PriorityChart data={data.priorityDistribution} />
+          </div>
         </div>
       </div>
     </div>

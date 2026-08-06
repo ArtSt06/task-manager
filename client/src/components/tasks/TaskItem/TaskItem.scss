@@ -2,93 +2,298 @@
 @use "@styles/abstracts/mixins" as *;
 
 .task-item {
-  padding: $spacing-md $spacing-lg;
+  position: relative;
+
+  width: 100%;
+  padding: $spacing-sm $spacing-md;
+
+  @include flex-column;
 
   border: 1px solid var(--border-color);
-  border-left-width: 4px;
   border-radius: $border-radius;
 
   background: var(--bg-card);
 
   transition: all $transition-duration;
 
-  &.priority-low {
-    border-left-color: var(--priority-low);
+  .task-status-line {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 4px;
+
+    border-top-left-radius: $border-radius;
+    border-bottom-left-radius: $border-radius;
   }
-  &.priority-medium {
-    border-left-color: var(--priority-medium);
+
+  &.status-todo .task-status-line {
+    background: var(--status-todo);
   }
-  &.priority-high {
-    border-left-color: var(--priority-high);
+
+  &.status-inProgress .task-status-line {
+    background: var(--status-inProgress);
+  }
+
+  &.status-done .task-status-line {
+    background: var(--status-done);
+  }
+
+  &.status-done {
+    background: var(--bg-done);
+    border-color: var(--status-done);
   }
 
   &:hover {
+    box-shadow: $shadow-sm;
     border-color: var(--border-hover);
-    box-shadow: $shadow-md;
   }
 
-  .task-header {
-    margin-bottom: $spacing-sm;
+  .task-row {
+    width: 100%;
 
-    @include flex-space-between;
-    gap: $spacing-md;
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr) 105px 80px 80px 80px 72px;
+    align-items: center;
+    gap: $spacing-lg;
+  }
 
-    h3 {
-      font-size: $font-size-base;
-      font-weight: 600;
+  .toggle-status-button {
+    max-width: 32px;
+    max-height: 32px;
+    aspect-ratio: 1 / 1;
+
+    @include flex-center;
+    flex-shrink: 0;
+
+    border: none;
+
+    background: transparent;
+
+    font-size: $font-size-md;
+    color: var(--text-secondary);
+
+    transition: color $transition-duration;
+    cursor: pointer;
+
+    .icon-todo {
+      color: var(--text-muted);
+    }
+
+    .icon-done {
+      color: var(--status-done);
+    }
+
+    &:hover {
       color: var(--text-primary);
     }
+  }
 
-    .task-badges {
-      display: flex;
-      gap: $spacing-sm;
-      flex-shrink: 0;
+  .task-title {
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+    font-weight: 500;
+    color: var(--text-primary);
+
+    overflow: hidden;
+    transition: color $transition-duration;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--primary-color);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--primary-color);
+      outline-offset: 2px;
+      border-radius: 4px;
     }
   }
 
-  .task-description {
-    margin-bottom: $spacing-sm;
-
-    color: var(--text-secondary);
-    font-size: $font-size-sm;
-  }
-
-  .task-meta {
-    margin-bottom: $spacing-md;
-
+  .task-deadline,
+  .task-created {
     display: flex;
-    gap: $spacing-md;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
 
     font-size: $font-size-xs;
+    white-space: nowrap;
     color: var(--text-muted);
   }
 
   .task-actions {
     display: flex;
-    gap: $spacing-sm;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+  }
 
-    button {
-      padding: 4px $spacing-md;
+  .delete-button,
+  .edit-button {
+    max-width: 32px;
+    width: 100%;
+    max-height: 32px;
+    height: 100%;
+    aspect-ratio: 1 / 1;
 
-      border-radius: $border-radius;
+    flex-shrink: 0;
 
-      background: var(--bg-hover);
+    border: none;
+    border-radius: 6px;
 
-      font-size: $font-size-sm;
-      color: var(--text-secondary);
+    background: transparent;
 
-      transition: all $transition-duration;
+    font-size: $font-size-md;
+    color: var(--text-secondary);
 
-      &:hover:not(:disabled) {
-        background: var(--bg-active);
+    cursor: pointer;
+    transition:
+      color $transition-duration,
+      background-color $transition-duration;
 
-        color: var(--text-primary);
+    &:hover {
+      background: var(--hover-bg, rgba(0, 0, 0, 0.04));
+
+      color: var(--text-primary);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--primary-color);
+      outline-offset: 2px;
+    }
+  }
+
+  .delete-button {
+    &:hover {
+      color: var(--priority-high);
+    }
+  }
+
+  .task-description {
+    max-height: 0;
+    margin: 0;
+    padding: 0 $spacing-md;
+
+    color: var(--text-secondary);
+    font-size: $font-size-sm;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    overflow: hidden;
+    color: var(--text-secondary);
+
+    transition:
+      max-height 0.3s ease-in-out,
+      margin 0.3s ease-in-out,
+      padding 0.3s ease-in-out;
+
+    &.expanded {
+      max-height: 240px;
+      margin-top: $spacing-md;
+      padding: $spacing-md $spacing-md 0 $spacing-md;
+
+      border-top: 1px solid var(--border-color);
+    }
+  }
+}
+
+@include tablet {
+  .task-item {
+    .task-row {
+      grid-template-columns: 32px minmax(0, 1fr) 48px 64px 80px 80px 72px;
+
+      .task-badge {
+        max-width: 16px;
+        padding: $spacing-sm;
+        aspect-ratio: 1 / 1;
+
+        justify-self: center;
+
+        border: 1px solid var(--shadow-color);
+        border-radius: 50%;
+
+        font-size: 0;
       }
+    }
+  }
+}
 
-      &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
+@include mobile {
+  .task-item {
+    .task-row {
+      grid-template-columns: 32px minmax(0, 1fr) 102px 80px 72px;
+      grid-template-areas:
+        "toggle title status priority actions"
+        "toggle title deadline created actions";
+      gap: $spacing-sm;
+
+      .task-badge {
+        max-width: none;
+        padding: $spacing-xs $spacing-sm;
+        aspect-ratio: 0;
+
+        justify-self: center;
+
+        border: none;
+        border-radius: 12px;
+
+        font-size: $font-size-xs;
       }
+    }
+  }
+
+  .toggle-status-button {
+    grid-area: toggle;
+  }
+
+  .task-title {
+    grid-area: title;
+  }
+
+  .task-badge.status {
+    grid-area: status;
+  }
+
+  .task-badge.priority {
+    grid-area: priority;
+  }
+
+  .task-deadline {
+    grid-area: deadline;
+
+    &.unset {
+      display: none;
+    }
+  }
+
+  .task-created {
+    grid-area: created;
+  }
+
+  .task-actions {
+    grid-area: actions;
+    justify-content: flex-end;
+  }
+}
+
+@include mobile-small {
+  .task-item {
+    .task-row {
+      grid-template-columns: 32px 102px 80px auto 32px;
+      grid-template-areas:
+        "toggle title title title actions"
+        "toggle status priority deadline actions";
+      gap: $spacing-sm;
+      .task-actions {
+        flex-direction: column-reverse;
+      }
+    }
+
+    .task-created {
+      display: none;
     }
   }
 }

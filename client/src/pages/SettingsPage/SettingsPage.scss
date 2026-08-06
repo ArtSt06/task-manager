@@ -1,14 +1,115 @@
-@use '@styles/abstracts/variables' as *;
-@use '@styles/abstracts/mixins' as *;
+@use "@styles/abstracts/variables" as *;
+@use "@styles/abstracts/mixins" as *;
 
 .settings-page {
-  max-width: 640px;
-  margin: 0 auto;
+  .settings-grid {
+    display: grid;
+    grid-template-areas:
+      "Preferences Data"
+      "Preferences Security";
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    gap: $spacing-lg;
+  }
 
-  h2 {
-    font-size: $font-size-xl;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: $spacing-lg;
+  .settings-container {
+    padding: $spacing-lg;
+
+    @include flex-column;
+    gap: $spacing-lg;
+
+    border: 1px solid var(--border-color);
+    border-radius: $border-radius;
+    background: var(--bg-card);
+
+    .settings-section {
+      border-left: 3px solid var(--border-color);
+
+      .section-title {
+        max-width: fit-content;
+        padding: $spacing-sm $spacing-md;
+        border-top: 3px solid var(--border-color);
+
+        font-size: $font-size-md;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      .setting-group {
+        padding: $spacing-md;
+
+        @include flex-column;
+        gap: $spacing-sm;
+
+        border-top: 3px solid var(--border-color);
+
+        .group-label {
+          max-width: fit-content;
+          max-height: fit-content;
+
+          font-size: 14px;
+          font-weight: 500;
+          color: var(--text-secondary);
+        }
+
+        &.checkbox {
+          flex-direction: row;
+          gap: $spacing-md;
+        }
+
+        &:last-of-type {
+          border-bottom: 3px solid var(--border-color);
+        }
+
+        &.action {
+          button {
+            padding: $spacing-sm $spacing-md;
+
+            border-radius: $border-radius;
+            border: 1px solid var(--border-color);
+
+            background: var(--bg-input);
+
+            font-size: $font-size-sm;
+            color: var(--text-secondary);
+
+            cursor: pointer;
+            transition: all $transition-duration;
+
+            &:hover:not(:disabled) {
+              background: var(--bg-hover);
+
+              color: var(--text-primary);
+            }
+
+            &:disabled {
+              opacity: 0.6;
+              cursor: not-allowed;
+            }
+
+            &.button-danger {
+              border-color: var(--priority-high);
+
+              color: var(--priority-high);
+              &:hover:not(:disabled) {
+                background: var(--priority-high-bg);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@include mobile {
+  .settings-page {
+    .settings-grid {
+      padding-right: $spacing-md;
+
+      overflow: auto;
+
+      @include flex-column;
+    }
   }
 }

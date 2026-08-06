@@ -2,28 +2,189 @@
 @use "@styles/abstracts/mixins" as *;
 
 .task-form {
-  .form-group {
-    margin-bottom: $spacing-md;
+  display: grid;
+  grid-template-areas:
+    "Title Title"
+    "Options Deadline"
+    "Description Deadline"
+    "Actions Actions";
+  grid-template-columns: 1fr 240px;
+  grid-template-rows: auto auto 1fr auto;
+  gap: $spacing-lg;
 
-    label {
-      margin-bottom: $spacing-xs;
-      display: block;
+  .additional-task-options {
+    grid-area: Options;
+
+    padding-top: $spacing-sm;
+
+    @include flex-column;
+    gap: $spacing-md;
+
+    .form-group {
+      flex: 1;
+      min-width: 140px;
+    }
+  }
+
+  .form-group {
+    @include flex-column;
+    gap: $spacing-sm;
+
+    .group-label {
       font-size: $font-size-sm;
       font-weight: 500;
       color: var(--text-secondary);
     }
 
+    &.title {
+      grid-area: Title;
+    }
+
+    &.description {
+      grid-area: Description;
+    }
+
+    &.deadline {
+      grid-area: Deadline;
+
+      .deadline-header {
+        position: relative;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .deadline-output {
+          max-width: 128px;
+          width: 100%;
+          padding: $spacing-sm $spacing-md;
+
+          border: 1px solid var(--border-color);
+          border-radius: $border-radius;
+          outline: none;
+
+          background: var(--bg-input);
+
+          font-size: $font-size-sm;
+          font-family: inherit;
+          color: var(--text-primary);
+
+          &:has(+ .deadline-clear) {
+            padding-right: $spacing-xl;
+          }
+        }
+
+        .deadline-clear {
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+
+          max-height: 16px;
+
+          border: none;
+
+          background: transparent;
+
+          font-size: 16px;
+          color: var(--text-muted);
+
+          transition: color $transition-duration;
+          cursor: pointer;
+
+          &:hover {
+            color: var(--text-primary);
+          }
+        }
+      }
+
+      .calendar-wrapper {
+        @include flex-column;
+        gap: $spacing-md;
+
+        .react-datepicker {
+          max-height: 245px;
+          height: 100%;
+
+          border: 1px solid var(--border-color);
+          border-radius: $border-radius;
+          box-shadow: $shadow-md;
+
+          background: var(--bg-card);
+
+          font-family: inherit;
+
+          overflow: hidden;
+
+          &__header {
+            padding: $spacing-sm;
+
+            border-bottom: 1px solid var(--border-color);
+
+            background: var(--bg-input);
+          }
+
+          &__current-month {
+            text-transform: capitalize;
+            font-weight: 600;
+            color: var(--text-primary);
+          }
+
+          &__day {
+            border-radius: $border-radius;
+
+            color: var(--text-primary);
+
+            transition: all $transition-duration;
+
+            &:hover {
+              background: var(--bg-hover) !important;
+            }
+
+            &--selected {
+              background: var(--primary-light);
+            }
+
+            &--keyboard-selected {
+              background: transparent !important;
+              color: var(--text-primary) !important;
+            }
+
+            &--disabled {
+              color: var(--text-muted);
+            }
+
+            &--today {
+              font-weight: 300 !important;
+            }
+
+            &-names {
+              display: none;
+            }
+          }
+
+          &__navigation {
+            top: 3px;
+          }
+        }
+      }
+    }
+
     input,
-    select,
     textarea {
       width: 100%;
       padding: $spacing-sm $spacing-md;
+
       border: 1px solid var(--border-color);
       border-radius: $border-radius;
       outline: none;
+
       background: var(--bg-input);
+
       font-size: $font-size-sm;
+      font-family: inherit;
       color: var(--text-primary);
+
       transition: border-color $transition-duration;
 
       &:focus {
@@ -37,33 +198,34 @@
     }
 
     textarea {
-      resize: vertical;
-      font-family: inherit;
+      height: 100%;
+
+      resize: none;
+      scrollbar-width: none;
+      overflow-y: auto;
     }
   }
 
-  .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: $spacing-md;
-  }
-
   .form-actions {
-    margin-top: $spacing-lg;
-    padding-top: $spacing-md;
+    grid-area: Actions;
+
     display: flex;
-    justify-content: flex-end;
     gap: $spacing-md;
-    border-top: 1px solid var(--border-color);
+    justify-content: space-around;
 
     button {
       padding: $spacing-sm $spacing-lg;
+
       border-radius: $border-radius;
+
       font-weight: 500;
+
       transition: all $transition-duration;
+      cursor: pointer;
 
       &:first-child {
         background: var(--bg-hover);
+
         color: var(--text-secondary);
         &:hover:not(:disabled) {
           background: var(--border-color);
@@ -72,7 +234,7 @@
 
       &:last-child {
         background: var(--primary-color);
-        color: #fff;
+        color: rgba(255, 255, 255, 1);
         &:hover:not(:disabled) {
           background: var(--primary-hover);
         }
@@ -81,6 +243,45 @@
       &:disabled {
         opacity: 0.6;
         cursor: not-allowed;
+      }
+    }
+  }
+}
+
+@include mobile-small {
+  .task-form {
+    grid-template-areas:
+      "Title"
+      "Options"
+      "Description"
+      "Deadline"
+      "Actions";
+    grid-template-columns: 1fr;
+    gap: $spacing-lg;
+
+    .additional-task-options {
+      grid-area: Options;
+
+      padding-top: $spacing-sm;
+
+      @include flex-column;
+      gap: $spacing-md;
+
+      .form-group {
+        flex: 1;
+        min-width: 140px;
+      }
+    }
+
+    .form-group {
+      @include flex-column;
+      gap: $spacing-sm;
+
+      &.deadline {
+        .calendar-wrapper {
+          width: fit-content;
+          align-self: center;
+        }
       }
     }
   }

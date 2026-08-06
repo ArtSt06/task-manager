@@ -1,6 +1,8 @@
 @use "@styles/abstracts/variables" as *;
 @use "@styles/abstracts/mixins" as *;
 
+html,
+body,
 #root {
   min-height: 100vh;
 
@@ -8,11 +10,6 @@
 
   font-family: $font-family;
   color: var(--text-primary);
-}
-
-html,
-body {
-  height: 100%;
 }
 
 * {
@@ -29,41 +26,94 @@ body {
 
   border-radius: 12px;
 
+  flex-shrink: 0;
   font-size: $font-size-xs;
   font-weight: 500;
   text-transform: capitalize;
+  text-align: center;
+  white-space: nowrap;
 
-  &.priority-low {
-    background: var(--priority-low-bg);
+  &.priority {
+    &-low {
+      background: var(--priority-low-bg);
 
-    color: var(--priority-low);
+      color: var(--priority-low);
+    }
+
+    &-medium {
+      background: var(--priority-medium-bg);
+
+      color: var(--priority-medium);
+    }
+
+    &-high {
+      background: var(--priority-high-bg);
+
+      color: var(--priority-high);
+    }
   }
-  &.priority-medium {
-    background: var(--priority-medium-bg);
 
-    color: var(--priority-medium);
+  &.status {
+    &-todo {
+      background: var(--status-todo-bg);
+
+      color: var(--status-todo);
+    }
+
+    &-inProgress {
+      background: var(--status-inProgress-bg);
+
+      color: var(--status-inProgress);
+    }
+
+    &-done {
+      background: var(--status-done-bg);
+
+      color: var(--status-done);
+    }
   }
-  &.priority-high {
-    background: var(--priority-high-bg);
 
-    color: var(--priority-high);
-  }
-
-  &.status-todo,
   &.created {
     background: var(--status-todo-bg);
 
     color: var(--status-todo);
   }
-  &.status-inProgress {
-    background: var(--status-inProgress-bg);
 
-    color: var(--status-inProgress);
-  }
-  &.status-done,
   &.completed {
     background: var(--status-done-bg);
 
     color: var(--status-done);
   }
+}
+
+.page {
+  max-height: 825px;
+  height: 100vh;
+
+  @include flex-column;
+  gap: $spacing-lg;
+
+  .page-title {
+    font-size: $font-size-xl;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+}
+
+.custom-toast {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 12px 16px;
+  border-radius: 8px;
+}
+
+.custom-toast-success {
+  background: var(--status-done-bg);
+  color: var(--status-done);
+}
+
+.custom-toast-error {
+  background: var(--priority-high-bg);
+  color: var(--priority-high);
 }

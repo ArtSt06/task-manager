@@ -6,14 +6,16 @@ import "./SettingsPage.scss";
 
 const SettingsPage = () => {
   return (
-    <div className="settings-page">
-      <h2>Настройки</h2>
+    <div className="settings-page page">
+      <h2 className="page-title">Настройки</h2>
 
-      <UserPreferences />
+      <div className="settings-grid">
+        <UserPreferences />
 
-      <DataManagement />
+        <DataManagement />
 
-      <Security />
+        <Security />
+      </div>
     </div>
   );
 };

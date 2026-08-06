@@ -22,12 +22,6 @@
   justify-content: center;
 }
 
-@mixin desktop-large {
-  @media (min-width: 1440px) {
-    @content;
-  }
-}
-
 @mixin desktop {
   @media (max-width: 1200px) {
     @content;

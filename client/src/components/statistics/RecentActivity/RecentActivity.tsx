@@ -1,7 +1,6 @@
 import type { Task } from "@shared/types";
 
-import { useSelector } from "react-redux";
-
+import { useAppSelector } from "@store/reduxHooks";
 import { selectAllTasks } from "@store/features/tasks/tasksSelectors";
 import { formatDate } from "@utils/date";
 
@@ -15,7 +14,7 @@ interface Activity {
 }
 
 const RecentActivity = () => {
-  const tasks = useSelector(selectAllTasks);
+  const tasks = useAppSelector(selectAllTasks);
 
   const activities: Activity[] = tasks
     .map((task: Task) => {
@@ -30,7 +29,7 @@ const RecentActivity = () => {
       };
     })
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .slice(0, 3);
+    .slice(0, 4);
 
   if (activities.length === 0) {
     return (
@@ -43,17 +42,19 @@ const RecentActivity = () => {
   return (
     <div className="recent-activity">
       <h3>Последние действия</h3>
-      
-      <ul>
+
+      <ul className="activity-list">
         {activities.map((activity) => (
-          <li key={activity.id}>
-            <span className="activity-title">{activity.title}</span>
+          <li className="task" key={activity.id}>
+            <span className="task-title">{activity.title}</span>
 
-            <span className={`task-badge ${activity.type}`}>
-              {activity.type === "created" ? "Создана" : "Выполнена"}
-            </span>
+            <div className="task-info">
+              <span className={`task-badge ${activity.type}`}>
+                {activity.type === "created" ? "Создана" : "Выполнена"}
+              </span>
 
-            <span className="activity-time">{formatDate(activity.date)}</span>
+              <span className="activity-time">{formatDate(activity.date)}</span>
+            </div>
           </li>
         ))}
       </ul>

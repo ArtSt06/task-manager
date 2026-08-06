@@ -1,0 +1,50 @@
+@use "@styles/abstracts/variables" as *;
+@use "@styles/abstracts/mixins" as *;
+
+.modal:has(.confirm-modal) {
+  max-width: 420px;
+}
+
+.confirm-modal {
+  @include flex-column-center;
+  gap: $spacing-lg;
+
+  .confirm-message {
+    font-size: $font-size-base;
+    color: var(--text-primary);
+  }
+
+  .confirm-actions {
+    display: flex;
+    align-self: flex-end;
+    gap: 12px;
+
+    button {
+      padding: $spacing-sm $spacing-lg;
+
+      border: none;
+      border-radius: 8px;
+
+      font-weight: 500;
+
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &.button-cancel {
+        background: var(--bg-hover);
+        color: var(--text-secondary);
+        &:hover {
+          background: var(--border-color);
+        }
+      }
+
+      &.button-confirm {
+        background: var(--primary-color);
+        color: rgba(255, 255, 255, 1);
+        &:hover {
+          background: var(--primary-hover);
+        }
+      }
+    }
+  }
+}

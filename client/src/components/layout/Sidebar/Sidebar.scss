@@ -2,11 +2,12 @@
 @use "@styles/abstracts/mixins" as *;
 
 .sidebar {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
 
-  width: $sidebar-width;
+  max-width: $sidebar-width;
+  width: 100%;
   height: 100vh;
   padding: $spacing-lg $spacing-md;
 
@@ -91,19 +92,23 @@
   }
 
   .sidebar-footer {
+    max-width: inherit;
     margin-top: auto;
     padding-top: $spacing-md;
     border-top: 1px solid var(--border-color);
 
     .user-info {
-      display: flex;
-      flex-direction: column;
+      @include flex-column;
       gap: $spacing-sm;
 
       .user-email {
+        max-width: calc($sidebar-width - 2 * $spacing-md);
+
+        text-align: center;
+        text-overflow: ellipsis;
+        overflow: clip;
         font-size: $font-size-sm;
         color: var(--text-secondary);
-        text-align: center;
       }
 
       .logout-button {

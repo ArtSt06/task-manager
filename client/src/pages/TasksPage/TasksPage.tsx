@@ -1,19 +1,21 @@
 import { useState, useEffect } from "react";
+
 import { useAppDispatch, useAppSelector } from "@store/reduxHooks";
 import { fetchTasks } from "@store/features/tasks/tasksSlice";
 import {
-  selectAllTasks,
   selectTasksLoading,
   selectTasksError,
 } from "@store/features/tasks/tasksSelectors";
+
 import TaskFilters from "@components/tasks/TaskFilters";
 import TasksList from "@components/tasks/TasksList";
 import Loader from "@components/common/Loader";
+import ErrorDisplay from "@components/common/ErrorDisplay";
+
 import "./TasksPage.scss";
 
 const TasksPage = () => {
   const dispatch = useAppDispatch();
-  const tasks = useAppSelector(selectAllTasks);
   const loading = useAppSelector(selectTasksLoading);
   const error = useAppSelector(selectTasksError);
 
@@ -27,27 +29,28 @@ const TasksPage = () => {
     dispatch(fetchTasks(filters));
   }, [dispatch, filters]);
 
+  const handleRetry = () => {
+    dispatch(fetchTasks(filters));
+  };
+
   if (error) {
     return (
-      <div className="tasks-page">
-        <h2>Список задач</h2>
-        <TaskFilters filters={filters} onFilterChange={setFilters} />
-        <div className="error">Ошибка: {error}</div>
-      </div>
+      <ErrorDisplay
+        title="Ошибка загрузки задач"
+        message={error}
+        fullPage={true}
+        onRetry={handleRetry}
+      />
     );
   }
 
   return (
-    <div className="tasks-page">
-      <h2>Список задач</h2>
+    <div className="tasks-page page">
+      <h2 className="page-title">Список задач</h2>
+
       <TaskFilters filters={filters} onFilterChange={setFilters} />
-      <div className="tasks-content">
-        {loading ? (
-          <Loader text="Загрузка задач..." />
-        ) : (
-          <TasksList tasks={tasks} />
-        )}
-      </div>
+
+      {loading ? <Loader text="Загрузка задач..." /> : <TasksList />}
     </div>
   );
 };

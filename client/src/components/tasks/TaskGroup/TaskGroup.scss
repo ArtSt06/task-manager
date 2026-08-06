@@ -1,0 +1,33 @@
+@use "@styles/abstracts/variables" as *;
+@use "@styles/abstracts/mixins" as *;
+
+.task-group {
+  @include flex-column;
+  gap: $spacing-md;
+
+  &-header {
+    padding: $spacing-sm 0 $spacing-xs;
+
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+
+    border-bottom: 2px solid var(--border-color);
+
+    h3 {
+      font-size: $font-size-md;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .task-count {
+      font-size: $font-size-sm;
+      color: var(--text-muted);
+    }
+  }
+
+  &-items {
+    @include flex-column;
+    gap: $spacing-sm;
+  }
+}

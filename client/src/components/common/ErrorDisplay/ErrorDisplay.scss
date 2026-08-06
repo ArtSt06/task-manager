@@ -1,0 +1,61 @@
+@use "@styles/abstracts/variables" as *;
+@use "@styles/abstracts/mixins" as *;
+
+.error-display {
+  width: 100%;
+  min-height: fit-content;
+  height: 100%;
+  padding: $spacing-lg;
+
+  @include flex-center;
+
+  &.full-page {
+    min-height: 100vh;
+    height: 100vh;
+  }
+
+  .error-content {
+    max-width: 400px;
+    width: 100%;
+    padding: $spacing-lg;
+
+    @include flex-column-center;
+    gap: $spacing-md;
+
+    border: 1px solid var(--border-color);
+    border-radius: $border-radius;
+
+    background: var(--bg-card);
+
+    .error-title {
+      font-size: $font-size-lg;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .error-message {
+      font-size: $font-size-md;
+      color: var(--text-secondary);
+    }
+
+    .error-retry {
+      padding: $spacing-sm $spacing-lg;
+
+      border: none;
+      border-radius: $border-radius;
+
+      background: var(--primary-color);
+
+      font-weight: 600;
+      font-size: $font-size-sm;
+      color: rgba(255, 255, 255, 1);
+
+      cursor: pointer;
+      transition: all $transition-duration;
+
+      &:hover {
+        background: var(--primary-hover);
+      }
+    }
+  }
+}

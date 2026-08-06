@@ -69,7 +69,7 @@ export const useTaskForm = (editingTask?: Task | null) => {
       status: formData.status,
       deadline: formData.deadline
         ? new Date(formData.deadline).toISOString()
-        : undefined,
+        : null,
     };
   }, [formData]);
 

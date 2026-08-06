@@ -4,6 +4,9 @@
 .custom-tooltip {
   padding: $spacing-sm;
 
+  @include flex-column;
+  gap: $spacing-sm;
+
   border: 1px solid var(--border-color);
   border-radius: 8px;
 
@@ -13,21 +16,16 @@
   color: var(--text-primary);
 
   &-label {
-    margin-bottom: 4px;
-
     font-weight: 600;
-    font-size: 14px;
+    font-size: $font-size-sm;
     color: var(--text-primary);
   }
 
   &-item {
-    margin: 2px 0;
-
-    display: flex;
-    align-items: center;
+    @include flex-center;
     gap: 6px;
 
-    font-size: 13px;
+    font-size: $font-size-sm;
   }
 
   &-dot {

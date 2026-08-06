@@ -1,6 +1,10 @@
 import type { Theme, Priority, Settings } from "@shared/types";
 
+import toast from "react-hot-toast";
+
 import { useAppDispatch, useAppSelector } from "@store/reduxHooks";
+import { FirebaseError } from "firebase/app";
+
 import {
   selectTheme,
   selectDefaultPriority,
@@ -8,6 +12,7 @@ import {
   selectConfirmDelete,
   selectSettingsLoading,
 } from "@store/features/settings/settingsSelectors";
+
 import {
   setTheme,
   setDefaultPriority,
@@ -16,6 +21,9 @@ import {
   patchSettings,
   resetSettings,
 } from "@store/features/settings/settingsSlice";
+
+import { useConfirm } from "@contexts/ConfirmContext";
+import { getFirebaseError } from "@utils/getFirebaseError";
 
 import CustomSelect from "@components/common/CustomSelect";
 
@@ -31,12 +39,16 @@ import {
 import "./UserPreferences.scss";
 
 const handleSettingsError = (error: unknown, fallbackMessage: string) => {
-  console.error(error);
-  alert(fallbackMessage);
+  if (error instanceof FirebaseError) {
+    toast.error(getFirebaseError(error));
+  } else {
+    toast.error(fallbackMessage);
+  }
 };
 
 const UserPreferences = () => {
   const dispatch = useAppDispatch();
+  const { confirm } = useConfirm();
 
   const theme = useAppSelector(selectTheme);
   const defaultPriority = useAppSelector(selectDefaultPriority);
@@ -54,14 +66,18 @@ const UserPreferences = () => {
     label: PRIORITY_LABELS[priority],
   }));
 
-  const statusOptions = STATUSES.filter((status) => status !== "done").map((status) => ({
-    value: status,
-    label: STATUS_LABELS[status],
-  }));
+  const statusOptions = STATUSES.filter((status) => status !== "done").map(
+    (status) => ({
+      value: status,
+      label: STATUS_LABELS[status],
+    }),
+  );
 
   const handleThemeChange = async (value: string) => {
     const newTheme = value as Theme;
+
     dispatch(setTheme(newTheme));
+
     try {
       await dispatch(patchSettings({ theme: newTheme })).unwrap();
     } catch (error) {
@@ -71,7 +87,9 @@ const UserPreferences = () => {
 
   const handlePriorityChange = async (value: string) => {
     const newPriority = value as Priority;
+
     dispatch(setDefaultPriority(newPriority));
+
     try {
       await dispatch(patchSettings({ defaultPriority: newPriority })).unwrap();
     } catch (error) {
@@ -81,7 +99,9 @@ const UserPreferences = () => {
 
   const handleStatusChange = async (value: string) => {
     const newStatus = value as Settings["defaultStatus"];
+
     dispatch(setDefaultStatus(newStatus));
+
     try {
       await dispatch(patchSettings({ defaultStatus: newStatus })).unwrap();
     } catch (error) {
@@ -93,7 +113,9 @@ const UserPreferences = () => {
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const newValue = event.target.checked;
+
     dispatch(setConfirmDelete(newValue));
+
     try {
       await dispatch(patchSettings({ confirmDelete: newValue })).unwrap();
     } catch (error) {
@@ -102,23 +124,35 @@ const UserPreferences = () => {
   };
 
   const handleResetSettings = async () => {
-    if (!window.confirm("Сбросить все настройки к значениям по умолчанию?"))
-      return;
+    const confirmed = await confirm(
+      "Сбросить все настройки к значениям по умолчанию?",
+      {
+        title: "Сброс настроек",
+        confirmText: "Сбросить",
+        cancelText: "Отмена",
+      },
+    );
+    if (!confirmed) return;
+
     try {
       await dispatch(resetSettings()).unwrap();
-      alert("Настройки сброшены");
+      toast.success("Настройки сброшены");
     } catch (error) {
       handleSettingsError(error, "Ошибка сброса настроек");
     }
   };
 
   return (
-    <div className="user-preferences">
-      <div className="settings-section">
-        <h3>Внешний вид</h3>
+    <div className="settings-container user-preferences">
+      <section className="settings-section">
+        <h3 className="section-title">Внешний вид</h3>
         <div className="setting-group">
-          <label htmlFor="theme">Тема</label>
+          <label className="group-label" htmlFor="theme">
+            Тема
+          </label>
+
           <CustomSelect
+            id="theme"
             value={theme}
             onChange={handleThemeChange}
             options={themeOptions}
@@ -126,13 +160,18 @@ const UserPreferences = () => {
             disabled={settingsLoading}
           />
         </div>
-      </div>
+      </section>
 
-      <div className="settings-section">
-        <h3>Задачи по умолчанию</h3>
+      <section className="settings-section">
+        <h3 className="section-title">Задачи по умолчанию</h3>
+
         <div className="setting-group">
-          <label htmlFor="defaultPriority">Приоритет</label>
+          <label className="group-label" htmlFor="defaultPriority">
+            Приоритет
+          </label>
+
           <CustomSelect
+            id="defaultPriority"
             value={defaultPriority}
             onChange={handlePriorityChange}
             options={priorityOptions}
@@ -140,9 +179,14 @@ const UserPreferences = () => {
             disabled={settingsLoading}
           />
         </div>
+
         <div className="setting-group">
-          <label htmlFor="defaultStatus">Статус</label>
+          <label className="group-label" htmlFor="defaultStatus">
+            Статус
+          </label>
+
           <CustomSelect
+            id="defaultStatus"
             value={defaultStatus}
             onChange={handleStatusChange}
             options={statusOptions}
@@ -150,10 +194,11 @@ const UserPreferences = () => {
             disabled={settingsLoading}
           />
         </div>
-      </div>
+      </section>
 
-      <div className="settings-section">
-        <h3>Поведение</h3>
+      <section className="settings-section">
+        <h3 className="section-title">Поведение</h3>
+
         <div className="setting-group checkbox">
           <input
             id="confirmDelete"
@@ -162,22 +207,22 @@ const UserPreferences = () => {
             onChange={handleConfirmDeleteChange}
             disabled={settingsLoading}
           />
-          <label htmlFor="confirmDelete">Подтверждать удаление задач</label>
-        </div>
-      </div>
 
-      <div className="settings-section">
-        <h3>Сброс настроек</h3>
-        <div className="setting-group actions">
-          <button
-            className="btn-outline"
-            onClick={handleResetSettings}
-            disabled={settingsLoading}
-          >
-            Сбросить настройки к значениям по умолчанию
+          <label className="group-label" htmlFor="confirmDelete">
+            Подтверждать удаление задач
+          </label>
+        </div>
+      </section>
+
+      <section className="settings-section">
+        <h3 className="section-title">Сброс настроек пользователя</h3>
+
+        <div className="setting-group action">
+          <button onClick={handleResetSettings} disabled={settingsLoading}>
+            Сбросить настройки
           </button>
         </div>
-      </div>
+      </section>
     </div>
   );
 };

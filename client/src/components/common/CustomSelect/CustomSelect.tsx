@@ -10,6 +10,7 @@ interface CustomSelectProps {
   value: string;
   onChange: (value: string) => void;
   options: Option[];
+  id?: string;
   className?: string;
   disabled?: boolean;
 }
@@ -18,6 +19,7 @@ const CustomSelect = ({
   value,
   onChange,
   options,
+  id = "",
   className = "",
   disabled = false,
 }: CustomSelectProps) => {
@@ -56,6 +58,7 @@ const CustomSelect = ({
       className={`custom-select ${className} ${disabled ? "disabled" : ""}`}
       ref={containerRef}
     >
+      <select id={id} className="hidden-select"></select>
       <div
         className={`custom-select-trigger ${isOpen ? "open" : ""}`}
         tabIndex={disabled ? -1 : 0}

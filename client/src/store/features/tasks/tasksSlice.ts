@@ -3,7 +3,13 @@ import type { Task } from "@shared/types";
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { getTasks, createTask, updateTask, deleteTask, deleteAllTasks } from "@api/tasks";
+import {
+  getTasks,
+  createTask,
+  updateTask,
+  deleteTask,
+  deleteAllTasks,
+} from "@api/tasks";
 
 export const fetchTasks = createAsyncThunk(
   "tasks/fetchTasks",
@@ -109,6 +115,7 @@ const tasksSlice = createSlice({
       })
       .addCase(removeAllTasks.fulfilled, (state) => {
         state.items = [];
+        state.filters = {};
       })
       .addCase(removeAllTasks.rejected, (state, action) => {
         state.error = action.error.message || "Ошибка удаления задач";

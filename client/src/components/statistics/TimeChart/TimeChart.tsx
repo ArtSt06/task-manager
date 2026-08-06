@@ -14,7 +14,17 @@ import dayjs from "dayjs";
 import weekOfYear from "dayjs/plugin/weekOfYear";
 import "dayjs/locale/ru";
 
+import { formatChartDate, formatChartLabel } from "@utils/date";
+
 import CustomTooltip from "@components/statistics/CustomTooltip";
+import Loader from "@components/common/Loader";
+
+import {
+  AXIS_TICK_STYLE,
+  AXIS_STROKE_STYLE,
+  CREATED_LINE,
+  COMPLETED_LINE,
+} from "@constants/chartsConfig";
 
 import "./TimeChart.scss";
 
@@ -27,24 +37,6 @@ interface TimeChartProps {
   onPeriodChange: (period: StatisticsPeriod) => void;
   loading?: boolean;
 }
-
-const axisTickStyle = { fill: "var(--text-secondary)", fontSize: 12 };
-const gridStyle = { stroke: "var(--border-color)" };
-const legendStyle = { color: "var(--text-secondary)" };
-
-const createdLineConfig = {
-  stroke: "#3b82f6",
-  strokeWidth: 2,
-  dot: { r: 4, fill: "#3b82f6" },
-  activeDot: { r: 6 },
-};
-
-const completedLineConfig = {
-  stroke: "#22c55e",
-  strokeWidth: 2,
-  dot: { r: 4, fill: "#22c55e" },
-  activeDot: { r: 6 },
-};
 
 const groupByWeek = (
   data: { date: string; created: number; completed: number }[],
@@ -80,20 +72,10 @@ const TimeChart = ({
     chartData = groupByWeek(data);
   }
 
-  const formatDate = (dateStr: string) => {
-    if (period === "week") {
-      return dayjs(dateStr).format("DD.MM");
-    } else {
-      const start = dayjs(dateStr);
-      const end = start.add(6, "day");
-      return `${start.format("DD.MM")} – ${end.format("DD.MM")}`;
-    }
-  };
-
   return (
-    <div className="chart-container time-chart">
+    <div className="time-chart">
       <div className="chart-header">
-        <h3>Динамика задач</h3>
+        <h3 className="chart-title">Динамика задач</h3>
 
         <div className="period-toggle">
           <button
@@ -111,50 +93,48 @@ const TimeChart = ({
           </button>
         </div>
       </div>
-      <div className="chart-wrapper">
-        {loading && (
-          <div className="chart-loading-overlay">
-            <span>Обновление...</span>
-          </div>
-        )}
 
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" {...gridStyle} />
-            <XAxis
-              dataKey="date"
-              tickFormatter={formatDate}
-              tick={axisTickStyle}
-              {...gridStyle}
-            />
-            <YAxis tick={axisTickStyle} {...gridStyle} />
-            <Tooltip
-              content={<CustomTooltip />}
-              labelFormatter={(label) => {
-                const dateStr = String(label);
-                if (period === "week") {
-                  return dayjs(dateStr).format("DD MMM YYYY");
-                } else {
-                  const start = dayjs(dateStr);
-                  const end = start.add(6, "day");
-                  return `Неделя ${start.format("DD MMM")} – ${end.format("DD MMM")}`;
+      <div className="chart-wrapper">
+        {loading ? (
+          <Loader />
+        ) : (
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartData}>
+              <CartesianGrid className="chart-grid" />
+              <XAxis
+                className="chart-grid"
+                dataKey="date"
+                tickFormatter={(dateStr) => formatChartDate(dateStr)}
+                tick={AXIS_TICK_STYLE}
+                tickMargin={8}
+                {...AXIS_STROKE_STYLE}
+              />
+              <YAxis
+                className="chart-grid"
+                tick={AXIS_TICK_STYLE}
+                tickSize={12}
+                tickMargin={6}
+                {...AXIS_STROKE_STYLE}
+              />
+              <Tooltip
+                content={<CustomTooltip />}
+                labelFormatter={(label) => formatChartLabel(label, period)}
+                formatter={(value, name) => [
+                  value,
+                  name === "created" ? "Создано" : "Выполнено",
+                ]}
+              />
+              <Legend
+                formatter={(value) =>
+                  value === "created" ? "Создано" : "Выполнено"
                 }
-              }}
-              formatter={(value, name) => [
-                value,
-                name === "created" ? "Создано" : "Выполнено",
-              ]}
-            />
-            <Legend
-              formatter={(value) =>
-                value === "created" ? "Создано" : "Выполнено"
-              }
-              wrapperStyle={legendStyle}
-            />
-            <Line type="linear" dataKey="created" {...createdLineConfig} />
-            <Line type="linear" dataKey="completed" {...completedLineConfig} />
-          </LineChart>
-        </ResponsiveContainer>
+                wrapperStyle={{ color: "var(--text-secondary)" }}
+              />
+              <Line type="linear" dataKey="created" {...CREATED_LINE} />
+              <Line type="linear" dataKey="completed" {...COMPLETED_LINE} />
+            </LineChart>
+          </ResponsiveContainer>
+        )}
       </div>
     </div>
   );

@@ -6,16 +6,14 @@ import {
   updateEmail,
 } from "firebase/auth";
 
+import toast from "react-hot-toast";
+
 import { auth } from "@firebase_setup/firebase";
-import { handleFirebaseError } from "@utils/getFirebaseError";
+import { getFirebaseError } from "@utils/getFirebaseError";
 
 import "./Security.scss";
 
 const Security = () => {
-  const [activeForm, setActiveForm] = useState<"password" | "email" | null>(
-    null,
-  );
-
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
@@ -31,130 +29,144 @@ const Security = () => {
     await reauthenticateWithCredential(user, credential);
   };
 
-  const handleChangePassword = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleChangePassword = async (event: React.SubmitEvent) => {
+    event.preventDefault();
+
     if (newPassword !== confirmNewPassword) {
-      alert("Пароли не совпадают");
+      toast.error("Пароли не совпадают");
       return;
     }
-    if (newPassword.length < 6) {
-      alert("Пароль должен быть не менее 6 символов");
-      return;
-    }
+
     setIsLoading(true);
+
     try {
       const user = auth.currentUser;
       if (!user || !user.email) throw new Error("Нет данных пользователя");
+
       await reauthenticate(user.email, currentPassword);
       await updatePassword(user, newPassword);
-      alert("Пароль успешно изменён");
+
+      toast.success("Пароль успешно изменён");
+
       setCurrentPassword("");
       setNewPassword("");
       setConfirmNewPassword("");
-      setActiveForm(null);
     } catch (error) {
-      handleFirebaseError(error);
+      toast.error(getFirebaseError(error));
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleChangeEmail = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleChangeEmail = async (event: React.SubmitEvent) => {
+    event.preventDefault();
+
     if (!newEmail) {
-      alert("Введите новый email");
+      toast.error("Введите новый email");
       return;
     }
+
     setIsLoading(true);
+
     try {
       const user = auth.currentUser;
       if (!user || !user.email) throw new Error("Нет данных пользователя");
+
       await reauthenticate(user.email, emailPassword);
       await updateEmail(user, newEmail);
-      alert("Email успешно изменён");
+
+      toast.success("Email успешно изменён");
+
       setNewEmail("");
       setEmailPassword("");
-      setActiveForm(null);
     } catch (error) {
-      handleFirebaseError(error);
+      toast.error(getFirebaseError(error));
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="security">
+    <div className="settings-container security">
       <div className="settings-section">
-        <h3>Безопасность</h3>
-        <div className="setting-group actions">
-          <button
-            className="btn-outline"
-            onClick={() =>
-              setActiveForm(activeForm === "password" ? null : "password")
-            }
-          >
-            Сменить пароль
-          </button>
-          <button
-            className="btn-outline"
-            onClick={() =>
-              setActiveForm(activeForm === "email" ? null : "email")
-            }
-          >
-            Сменить email
-          </button>
-        </div>
+        <h3 className="section-title">Безопасность</h3>
 
-        {activeForm === "password" && (
-          <form className="settings-form" onSubmit={handleChangePassword}>
+        <form
+          className="settings-form setting-group"
+          onSubmit={handleChangePassword}
+        >
+          <div className="form-assets">
+            <label className="group-label" htmlFor="currentPassword">
+              Смена пароля
+            </label>
+          </div>
+
+          <div className="form-inputs">
             <input
+              id="currentPassword"
               type="password"
               placeholder="Текущий пароль"
               value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
+              onChange={(event) => setCurrentPassword(event.target.value)}
               disabled={isLoading}
             />
             <input
+              id="newPassword"
               type="password"
               placeholder="Новый пароль"
               value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
+              onChange={(event) => setNewPassword(event.target.value)}
               disabled={isLoading}
             />
             <input
+              id="newPasswordRepeat"
               type="password"
               placeholder="Подтвердите пароль"
               value={confirmNewPassword}
-              onChange={(e) => setConfirmNewPassword(e.target.value)}
+              onChange={(event) => setConfirmNewPassword(event.target.value)}
               disabled={isLoading}
             />
-            <button type="submit" disabled={isLoading}>
-              Сохранить пароль
-            </button>
-          </form>
-        )}
+          </div>
 
-        {activeForm === "email" && (
-          <form className="settings-form" onSubmit={handleChangeEmail}>
+          <button type="submit" disabled={isLoading}>
+            Сохранить пароль
+          </button>
+        </form>
+
+        <form
+          className="settings-form setting-group"
+          onSubmit={handleChangeEmail}
+        >
+          <div className="form-assets">
+            <label className="group-label" htmlFor="email">
+              Смена email
+            </label>
+          </div>
+
+          <div className="form-inputs">
             <input
+              id="email"
               type="email"
+              autoComplete="email"
               placeholder="Новый email"
               value={newEmail}
-              onChange={(e) => setNewEmail(e.target.value)}
+              onChange={(event) => setNewEmail(event.target.value)}
               disabled={isLoading}
             />
             <input
+              id="password"
               type="password"
-              placeholder="Текущий пароль (для подтверждения)"
+              placeholder="Текущий пароль"
               value={emailPassword}
-              onChange={(e) => setEmailPassword(e.target.value)}
+              onChange={(event) => setEmailPassword(event.target.value)}
               disabled={isLoading}
             />
-            <button type="submit" disabled={isLoading}>
-              Сохранить email
-            </button>
-          </form>
-        )}
+          </div>
+
+          <button type="submit" disabled={isLoading}>
+            Сохранить email
+          </button>
+        </form>
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ const PrivateRoute = () => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return <Loader fullPage text="Проверка авторизации..." />;
+    return <Loader text="Проверка авторизации..." />;
   }
 
   return user ? <Outlet /> : <Navigate to="/sign-in" replace />;

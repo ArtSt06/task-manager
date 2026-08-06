@@ -2,16 +2,12 @@
 @use "@styles/abstracts/mixins" as *;
 
 .loader {
-  padding: $spacing-xl;
+  max-height: inherit;
+  min-height: inherit;
+  height: 100%;
 
   @include flex-column-center;
   gap: $spacing-md;
-
-  &-fullpage {
-    min-height: 60vh;
-
-    justify-content: center;
-  }
 
   &-spinner {
     width: 40px;

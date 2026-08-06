@@ -1,25 +1,2 @@
-@use '@styles/abstracts/variables' as *;
-@use '@styles/abstracts/mixins' as *;
-
-.tasks-page {
-  h2 {
-    font-size: $font-size-xl;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: $spacing-lg;
-  }
-
-  .loading {
-    @include flex-center;
-    font-size: $font-size-md;
-    color: var(--text-secondary);
-    padding: $spacing-xxl 0;
-  }
-
-  .error {
-    @include flex-center;
-    font-size: $font-size-md;
-    color: var(--priority-high);
-    padding: $spacing-xxl 0;
-  }
-}
+@use "@styles/abstracts/variables" as *;
+@use "@styles/abstracts/mixins" as *;

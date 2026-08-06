@@ -1,28 +1,95 @@
 @use "@styles/abstracts/variables" as *;
 @use "@styles/abstracts/mixins" as *;
 
-.task-list {
+.tasks-list {
+  width: 100%;
+
   @include flex-column;
   gap: $spacing-md;
-}
+  overflow: hidden;
 
-.task-list-empty {
-  padding: $spacing-xxl;
+  .task-list-empty {
+    @include flex-column-center;
+    padding: $spacing-xxl;
+    text-align: center;
+    color: var(--text-secondary);
 
-  @include flex-column-center;
+    p {
+      font-size: $font-size-lg;
+      font-weight: 500;
+      margin-bottom: $spacing-sm;
+    }
 
-  text-align: center;
-  color: var(--text-secondary);
-
-  p {
-    margin-bottom: $spacing-sm;
-
-    font-size: $font-size-lg;
-    font-weight: 500;
+    span {
+      font-size: $font-size-sm;
+      color: var(--text-muted);
+    }
   }
 
-  span {
-    font-size: $font-size-sm;
+  .task-list-header {
+    padding: $spacing-sm $spacing-md;
+    padding-right: calc($spacing-lg + 1px);
+
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr) 105px 80px 80px 80px 72px;
+    align-items: center;
+    gap: $spacing-lg;
+
+    border-bottom: 1px solid var(--border-color);
+
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: $font-size-xs;
+    font-weight: 600;
     color: var(--text-muted);
+
+    &-title {
+      max-width: 485px;
+    }
+
+    &-status,
+    &-priority,
+    &-actions,
+    &-deadline,
+    &-created {
+      text-align: center;
+    }
+
+    &-toggle {
+      width: 32px;
+      height: 1px;
+    }
+  }
+
+  .tasks-content {
+    max-height: 688px;
+    width: 100%;
+    padding-right: $spacing-sm;
+
+    @include flex-column;
+    gap: $spacing-lg;
+    flex: 1;
+
+    overflow-y: auto;
+
+    scrollbar-gutter: stable;
+    scrollbar-width: initial;
+    scrollbar-color: var(--border-color) var(--bg-input);
+  }
+}
+
+@include tablet {
+  .tasks-list {
+    .task-list-header {
+      grid-template-columns: 32px minmax(0, 1fr) 48px 64px 80px 80px 72px;
+    }
+  }
+}
+
+@include mobile {
+  .tasks-list {
+    .task-list-header {
+      display: none;
+    }
   }
 }

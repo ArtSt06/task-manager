@@ -11,7 +11,6 @@ import {
 } from "firebase/auth";
 
 import { auth } from "@firebase_setup/firebase";
-import { handleFirebaseError } from "@utils/getFirebaseError";
 import { useAppDispatch } from "@store/reduxHooks";
 import { fetchSettings } from "@store/features/settings/settingsSlice";
 
@@ -43,35 +42,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [dispatch]);
 
   const signIn = async (email: string, password: string) => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-    } catch (error) {
-      handleFirebaseError(error);
-    }
+    await signInWithEmailAndPassword(auth, email, password);
   };
 
   const signUp = async (email: string, password: string) => {
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-    } catch (error) {
-      handleFirebaseError(error);
-    }
+    await createUserWithEmailAndPassword(auth, email, password);
   };
 
   const logout = async () => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      handleFirebaseError(error);
-    }
+    await signOut(auth);
   };
 
   const resetPassword = async (email: string) => {
-    try {
-      await sendPasswordResetEmail(auth, email);
-    } catch (error) {
-      handleFirebaseError(error);
-    }
+    await sendPasswordResetEmail(auth, email);
   };
 
   const value = {

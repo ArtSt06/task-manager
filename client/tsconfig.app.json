@@ -17,20 +17,22 @@
 
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true,
 
     "baseUrl": ".",
     "paths": {
       "@api/*": ["src/api/*"],
       "@components/*": ["src/components/*"],
+      "@constants/*": ["src/constants/*"],
       "@contexts/*": ["src/contexts/*"],
       "@firebase_setup/*": ["src/firebase_setup/*"],
       "@hooks/*": ["src/hooks/*"],
       "@pages/*": ["src/pages/*"],
-      "@shared/*": ["../shared/*"] ,
+      "@shared/*": ["../shared/*"],
       "@store/*": ["src/store/*"],
       "@styles/*": ["src/styles/*"],
+      "@tests/*": ["src/__tests__/*"],
       "@utils/*": ["src/utils/*"]
     }
   },

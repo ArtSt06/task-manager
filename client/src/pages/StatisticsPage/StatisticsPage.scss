@@ -2,94 +2,69 @@
 @use "@styles/abstracts/mixins" as *;
 
 .statistics-page {
-  h2 {
-    margin-bottom: $spacing-lg;
-
-    font-size: $font-size-xl;
-    font-weight: 700;
-    color: var(--text-primary);
-  }
-
-  .error {
-    padding: $spacing-xxl 0;
-
-    @include flex-center;
-
-    font-size: $font-size-md;
-    color: var(--priority-high);
-  }
-
   .charts-grid {
     @include flex-column;
-    gap: $spacing-lg;
+    gap: 32px;
 
     .top-row {
-      display: flex;
-      gap: $spacing-lg;
-      align-items: stretch;
-
-      .summary-block {
-        padding: $spacing-lg;
-
-        @include flex-column-center;
-        flex: 0 0 220px;
-
-        border: 1px solid var(--border-color);
-        border-radius: $border-radius;
-
-        background: var(--bg-card);
-      }
-
-      .time-chart-wrapper {
-        min-height: 340px;
-
-        flex: 1;
-
-        .chart-container {
-          height: 100%;
-          padding: $spacing-lg;
-
-          @include flex-column;
-
-          border: 1px solid var(--border-color);
-          border-radius: $border-radius;
-
-          background: var(--bg-card);
-        }
-      }
+      display: grid;
+      grid-template-columns: 40fr 60fr;
+      gap: 32px;
     }
 
-    .charts-row {
+    .bottom-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: $spacing-lg;
-
-      .chart-container {
-        min-height: 340px;
-        padding: $spacing-lg;
-
-        @include flex-column;
-
-        border: 1px solid var(--border-color);
-        border-radius: $border-radius;
-
-        background: var(--bg-card);
-      }
+      grid-template-columns: 50fr 50fr;
+      gap: 32px;
     }
   }
 
-  @include tablet {
-    .top-row {
-      flex-direction: column;
+  .statistics-container {
+    height: 100%;
+    padding: $spacing-lg;
 
-      .summary-block {
-        flex: unset;
-        width: 100%;
-      }
+    @include flex-column;
+
+    border: 1px solid var(--border-color);
+    border-radius: $border-radius;
+
+    background: var(--bg-card);
+
+    .chart-grid {
+      stroke: var(--border-color);
+      stroke-dasharray: 3 3;
     }
 
-    .charts-row {
-      grid-template-columns: 1fr;
+    .chart-wrapper {
+      * {
+        outline: none;
+      }
+    }
+  }
+}
+
+@include mobile {
+  .statistics-page {
+    .charts-grid {
+      padding-right: $spacing-md;
+      
+      overflow: auto;
+
+      .top-row {
+        @include flex-column;
+      }
+
+      .bottom-row {
+        @include flex-column;
+      }
+    }
+  }
+}
+
+@include mobile-small {
+  .statistics-page {
+    .statistics-container {
+      height: 380px;
     }
   }
 }

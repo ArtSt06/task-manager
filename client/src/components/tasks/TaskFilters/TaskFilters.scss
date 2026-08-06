@@ -1,35 +1,42 @@
-@use '@styles/abstracts/variables' as *;
-@use '@styles/abstracts/mixins' as *;
+@use "@styles/abstracts/variables" as *;
+@use "@styles/abstracts/mixins" as *;
 
 .task-filters {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: $spacing-md;
-  margin-bottom: $spacing-lg;
-  flex-wrap: wrap;
 
   &-search {
-    flex: 1;
-    min-width: 200px;
     position: relative;
+
+    min-width: 200px;
+
+    flex: 1;
+    align-items: center;
 
     .search-icon {
       position: absolute;
       left: $spacing-md;
       top: 50%;
       transform: translateY(-50%);
+
       color: var(--text-secondary);
     }
 
     input {
       width: 100%;
-      padding: $spacing-sm $spacing-md $spacing-sm $spacing-xl;
+      padding: $spacing-sm $spacing-md $spacing-sm $spacing-xxl;
+
       border: 1px solid var(--border-color);
       border-radius: $border-radius;
-      background: var(--bg-input);
-      color: var(--text-primary);
-      font-size: $font-size-sm;
       outline: none;
+
+      background: var(--bg-input);
+
+      font-size: $font-size-sm;
+      color: var(--text-primary);
+
       transition: border-color $transition-duration;
 
       &::placeholder {
@@ -44,11 +51,23 @@
 
   &-selects {
     display: flex;
-    gap: $spacing-sm;
-    flex-wrap: wrap;
+    gap: $spacing-md;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
 
     .filter-select {
-      min-width: 140px;
+      max-width: fit-content;
+
+      flex: 1;
+    }
+  }
+}
+
+@include mobile-small {
+  .task-filters {
+    &-selects {
+      flex: 1;
+      justify-content: space-around;
     }
   }
 }
